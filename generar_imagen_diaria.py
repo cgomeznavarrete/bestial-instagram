@@ -221,16 +221,24 @@ def generar_imagen_con_referencia(contexto: dict, indice_botella: int) -> Image.
 I am giving you the REAL product image of "Salsa Bestial" artisanal hot sauce.
 Your task: generate a complete, photorealistic Instagram marketing image for this product.
 
-CRITICAL RULES:
-1. The sauce jar/bottle must appear EXACTLY as shown in the reference image — same shape, same label design, same colors, same logo, same typography. Do NOT invent or modify anything about the product.
-2. The product must be the HERO of the image, clearly visible and sharp.
-3. Context/scene: {contexto['nombre']} — {contexto['fondo_prompt']}
-4. Square format (1:1), 1080x1080px equivalent, professional advertising photography quality.
-5. The product label must be fully readable and faithful to the reference.
-6. Use dramatic, appetizing lighting that complements the context.
-7. No text overlays, no watermarks.
+PRODUCT SIZE — CRITICAL:
+The jar is a 230ml glass compote-style jar, approximately 8cm tall and 7cm wide — the size of a small jam or baby food jar.
+It must appear REALISTICALLY SMALL compared to the food elements in the scene.
+A dinner plate, cutting board or salad bowl should be visibly 3-4x larger than the jar.
+Place the jar naturally to the side or corner of the scene, like a condiment would be placed at a table.
+NEVER make the jar dominate the frame or appear larger than the main food elements.
 
-Generate the complete scene with the exact product as reference."""
+LABEL & APPEARANCE — CRITICAL:
+Reproduce the jar EXACTLY as shown in the reference image: same glass shape, same yellow label, same red BESTIAL lettering, same gorilla logo, same gold lid. Do NOT invent or modify anything.
+The label must be fully readable and faithful to the reference.
+
+SCENE & REALISM:
+Context: {contexto['nombre']} — {contexto['fondo_prompt']}
+The scene must look like a real photograph, not a CGI render. Use natural depth of field, realistic shadows, and consistent lighting across the jar and food elements.
+Square format (1:1), 1080x1080px, professional food photography quality.
+No text overlays, no watermarks.
+
+Generate the complete realistic scene with the jar integrated naturally at correct scale."""
 
     print(f"Generando imagen completa con Gemini ({contexto['nombre']})...")
 
