@@ -1,0 +1,90 @@
+{
+  "generaciones": [
+    {
+      "fecha": "22/03/2026",
+      "archivo": "bestial_20260322.png",
+      "contexto_id": "asado_familiar",
+      "contexto_nombre": "Asado familiar"
+    },
+    {
+      "fecha": "22/03/2026",
+      "archivo": "bestial_20260322.png",
+      "contexto_id": "parrilla_premium",
+      "contexto_nombre": "Parrilla premium"
+    },
+    {
+      "fecha": "22/03/2026",
+      "archivo": "bestial_20260322.png",
+      "contexto_id": "mesa_madera_rustica",
+      "contexto_nombre": "Mesa de madera rústica"
+    },
+    {
+      "fecha": "22/03/2026",
+      "archivo": "bestial_20260322.png",
+      "contexto_id": "evento_deportivo",
+      "contexto_nombre": "Evento deportivo"
+    },
+    {
+      "fecha": "23/03/2026",
+      "archivo": "bestial_20260323.png",
+      "contexto_id": "cocina_moderna",
+      "contexto_nombre": "Cocina moderna"
+    },
+    {
+      "fecha": "29/03/2026",
+      "archivo": "bestial_20260329.png",
+      "contexto_id": "picnic_campo",
+      "contexto_nombre": "Picnic al aire libre"
+    },
+    {
+      "fecha": "24/03/2026",
+      "archivo": "bestial_20260324.png",
+      "contexto_id": "terraza_noche",
+      "contexto_nombre": "Terraza nocturna"
+    },
+    {
+      "fecha": "25/03/2026",
+      "archivo": "bestial_20260325.png",
+      "contexto_id": "playa_verano",
+      "contexto_nombre": "Playa y verano"
+    },
+    {
+      "fecha": "26/03/2026",
+      "archivo": "bestial_20260326.png",
+      "contexto_id": "cumpleanos_fiesta",
+      "contexto_nombre": "Fiesta y celebración"
+    },
+    {
+      "fecha": "27/03/2026",
+      "archivo": "bestial_20260327.png",
+      "contexto_id": "desayuno_brunch",
+      "contexto_nombre": "Desayuno / Brunch"
+    },
+    {
+      "fecha": "28/03/2026",
+      "archivo": "bestial_20260328.png",
+      "contexto_id": "street_food",
+      "contexto_nombre": "Street food / Mercado"
+    },
+    {
+      "fecha": "02/04/2026",
+      "archivo": "bestial_20260402.png",
+      "contexto_id": "cocina_campo",
+      "contexto_nombre": "Cocina de campo / Rancho"
+    }
+  ],
+  "contextos_usados": [
+    "asado_familiar",
+    "parrilla_premium",
+    "mesa_madera_rustica",
+    "evento_deportivo",
+    "cocina_moderna",
+    "picnic_campo",
+    "terraza_noche",
+    "playa_verano",
+    "cumpleanos_fiesta",
+    "desayuno_brunch",
+    "street_food",
+    "cocina_campo"
+  ]
+}
