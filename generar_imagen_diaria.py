@@ -169,16 +169,40 @@ def generar_caption_claude(contexto: dict, fecha_str: str) -> dict:
     print(f"Planificando caption para: {contexto['nombre']}...")
 
     system = f"""Eres el content creator oficial de {BRAND}.
-Tono: audaz, directo, apasionado. Lenguaje cercano, algo rebelde. Habla de TU.
-Emojis clave: fuego, gorila, pimienta. Nunca corporativo."""
+
+TONO Y ESTILO (obligatorio):
+- Comercial y con proposito: cada post debe despertar el deseo de comprar/pedir la salsa.
+- Directo y apasionado. Habla de TU al cliente.
+- El producto es Salsa Tatemada artesanal hecha con habaneros rostizados al fuego — sabor ahumado y profundo.
+- Resalta como la salsa TRANSFORMA cualquier comida y es indispensable en la mesa.
+- Cierra siempre con un llamado a la accion claro: pedir, probar, conseguirla.
+- Sin emojis en exceso. Maximo 2-3 por post, usados con intencion.
+- Lenguaje natural y cercano, NUNCA corporativo ni genericamente motivacional.
+
+EJEMPLO DE LO QUE BUSCAMOS:
+"Hay comidas que saben bien... y comidas que saben BESTIAL.
+La diferencia esta en la salsa.
+Nuestra Salsa Tatemada es hecha artesanalmente con habaneros rostizados al fuego. Ese sabor ahumado y profundo que transforma cualquier comida y lleva cada bocado a otro nivel.
+Pruebala una vez y tu mesa nunca volvera a estar sin ella.
+Haz tu pedido ahora:"
+
+EJEMPLO DE LO QUE NO DEBES HACER (estilo incorrecto):
+- "El mercado huele a gloria y tu antojo ya esta gritando — sin una Bestial encima le falta alma" (demasiado informal, sin CTA comercial)
+- Frases solo de hype sin mencionar el producto o invitar a pedirlo."""
 
     prompt = f"""Crea el contenido para un post de Instagram de {BRAND}.
 Contexto de la imagen: {contexto['nombre']} — {contexto['ambiente']}
 Fecha: {fecha_str}
 
+El caption debe:
+1. Abrir con una frase que conecte el contexto con la necesidad de la salsa.
+2. Describir el producto (Salsa Tatemada, habaneros al fuego, sabor ahumado) de forma apetitosa.
+3. Cerrar con llamado a la accion para hacer el pedido.
+4. Tener entre 4 y 6 lineas. Sin listas. Sin bullets.
+
 Devuelve solo este JSON (sin markdown):
 {{
-  "caption": "texto completo del post con emojis y saltos de linea (2-4 lineas)",
+  "caption": "texto completo del post con saltos de linea",
   "hashtags": ["#tag1", "#tag2", "#tag3", "#tag4", "#tag5", "#tag6", "#tag7", "#tag8"]
 }}"""
 

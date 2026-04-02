@@ -1,0 +1,71 @@
+name: Publicar en Instagram - Salsas Bestial
+
+on:
+  schedule:
+    # POSTS en el feed — Martes y Viernes 12:00 PM Colombia (17:00 UTC)
+    - cron: '0 17 * * 2'   # Martes
+    - cron: '0 17 * * 5'   # Viernes
+    # STORIES — Lunes, Miércoles, Jueves, Sábado 10:00 AM Colombia (15:00 UTC)
+    - cron: '0 15 * * 1'   # Lunes
+    - cron: '0 15 * * 3'   # Miércoles
+    - cron: '0 15 * * 4'   # Jueves
+    - cron: '0 15 * * 6'   # Sábado
+  workflow_dispatch:
+    inputs:
+      tipo:
+        description: 'Tipo de publicación'
+        required: true
+        default: 'post'
+        type: choice
+        options:
+          - post
+          - story
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configurar Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Instalar dependencias
+        run: pip install requests pillow schedule
+
+      - name: Determinar tipo de publicación
+        id: tipo
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "tipo=${{ inputs.tipo }}" >> $GITHUB_OUTPUT
+          else
+            DIA=$(date +%u)   # 1=Lunes ... 7=Domingo
+            if [ "$DIA" = "2" ] || [ "$DIA" = "5" ]; then
+              echo "tipo=post" >> $GITHUB_OUTPUT
+            else
+              echo "tipo=story" >> $GITHUB_OUTPUT
+            fi
+          fi
+
+      - name: Publicar en Instagram
+        env:
+          INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
+          INSTAGRAM_BUSINESS_ACCOUNT_ID: ${{ secrets.INSTAGRAM_BUSINESS_ACCOUNT_ID }}
+          GITHUB_REPO: ${{ github.repository }}
+        run: python publicar_instagram.py --${{ steps.tipo.outputs.tipo }}
+
+      - name: Guardar log de publicaciones
+        run: |
+          git config user.name "Bestial Bot"
+          git config user.email "cgomeznavarrete@gmail.com"
+          git add "Imagenes Instgram/publicaciones_log.json" "Imagenes Instgram/" || true
+          git diff --staged --quiet || git commit -m "Publicacion Instagram: ${{ steps.tipo.outputs.tipo }} $(date +%Y%m%d)"
+          git push
