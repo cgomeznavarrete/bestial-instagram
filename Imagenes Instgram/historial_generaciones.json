@@ -71,6 +71,12 @@
       "archivo": "bestial_20260402.png",
       "contexto_id": "cocina_campo",
       "contexto_nombre": "Cocina de campo / Rancho"
+    },
+    {
+      "fecha": "02/04/2026",
+      "archivo": "bestial_20260402.png",
+      "contexto_id": "post_entrenamiento",
+      "contexto_nombre": "Post entrenamiento / Healthy"
     }
   ],
   "contextos_usados": [
@@ -85,6 +91,7 @@
     "cumpleanos_fiesta",
     "desayuno_brunch",
     "street_food",
-    "cocina_campo"
+    "cocina_campo",
+    "post_entrenamiento"
   ]
 }
