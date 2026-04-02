@@ -77,6 +77,12 @@
       "archivo": "bestial_20260402.png",
       "contexto_id": "post_entrenamiento",
       "contexto_nombre": "Post entrenamiento / Healthy"
+    },
+    {
+      "fecha": "02/04/2026",
+      "archivo": "bestial_20260402.png",
+      "contexto_id": "mesa_restaurante",
+      "contexto_nombre": "Mesa de restaurante"
     }
   ],
   "contextos_usados": [
@@ -92,6 +98,7 @@
     "desayuno_brunch",
     "street_food",
     "cocina_campo",
-    "post_entrenamiento"
+    "post_entrenamiento",
+    "mesa_restaurante"
   ]
 }
