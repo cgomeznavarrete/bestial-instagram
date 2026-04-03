@@ -97,6 +97,20 @@
       "tipo": "personas",
       "contexto_id": "asado_familiar",
       "contexto_nombre": "Asado familiar"
+    },
+    {
+      "fecha": "03/04/2026",
+      "archivo": "bestial_20260403_mesa.png",
+      "tipo": "mesa",
+      "contexto_id": "parrilla_premium",
+      "contexto_nombre": "Parrilla premium"
+    },
+    {
+      "fecha": "03/04/2026",
+      "archivo": "bestial_20260403_personas.png",
+      "tipo": "personas",
+      "contexto_id": "parrilla_premium",
+      "contexto_nombre": "Parrilla premium"
     }
   ],
   "contextos_usados": [
@@ -114,6 +128,7 @@
     "cocina_campo",
     "post_entrenamiento",
     "mesa_restaurante",
-    "asado_familiar"
+    "asado_familiar",
+    "parrilla_premium"
   ]
 }
