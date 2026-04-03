@@ -83,6 +83,20 @@
       "archivo": "bestial_20260402.png",
       "contexto_id": "mesa_restaurante",
       "contexto_nombre": "Mesa de restaurante"
+    },
+    {
+      "fecha": "02/04/2026",
+      "archivo": "bestial_20260402_mesa.png",
+      "tipo": "mesa",
+      "contexto_id": "asado_familiar",
+      "contexto_nombre": "Asado familiar"
+    },
+    {
+      "fecha": "02/04/2026",
+      "archivo": "bestial_20260402_personas.png",
+      "tipo": "personas",
+      "contexto_id": "asado_familiar",
+      "contexto_nombre": "Asado familiar"
     }
   ],
   "contextos_usados": [
@@ -99,6 +113,7 @@
     "street_food",
     "cocina_campo",
     "post_entrenamiento",
-    "mesa_restaurante"
+    "mesa_restaurante",
+    "asado_familiar"
   ]
 }

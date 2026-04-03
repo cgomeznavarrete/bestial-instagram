@@ -217,15 +217,14 @@ Devuelve solo este JSON (sin markdown):
     return json.loads(texto)
 
 
-# ─── Paso 2: Generar imagen completa con Gemini usando la botella como referencia
+# ─── Paso 2a: Imagen estilo MESA (comida, sin personas) ───────────────────────
 
-def generar_imagen_con_referencia(contexto: dict, indice_botella: int) -> Image.Image:
+def generar_imagen_mesa(contexto: dict, indice_botella: int) -> Image.Image:
     from google import genai
     from google.genai import types as gtypes
 
     client_gemini = genai.Client(api_key=os.environ.get("GOOGLE_API_KEY"))
 
-    # Elegir referencia del día
     refs_existentes = [r for r in IMAGENES_REFERENCIA if r.exists()]
     if not refs_existentes:
         print("No se encontraron imagenes de referencia.")
@@ -233,7 +232,6 @@ def generar_imagen_con_referencia(contexto: dict, indice_botella: int) -> Image.
     referencia = refs_existentes[indice_botella % len(refs_existentes)]
     print(f"Referencia del dia: {referencia.name}")
 
-    # Leer imagen de referencia en base64
     ext = referencia.suffix.lower()
     media_types = {".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".png": "image/png"}
     media_type = media_types.get(ext, "image/jpeg")
@@ -244,6 +242,7 @@ def generar_imagen_con_referencia(contexto: dict, indice_botella: int) -> Image.
 
 I am giving you the REAL product image of "Salsa Bestial" artisanal hot sauce.
 Your task: generate a complete, photorealistic Instagram marketing image for this product.
+NO people in this image — food and product only.
 
 PRODUCT SIZE — CRITICAL:
 The jar is a 230ml glass compote-style jar, approximately 8cm tall and 7cm wide — the size of a small jam or baby food jar.
@@ -264,26 +263,12 @@ No text overlays, no watermarks.
 
 Generate the complete realistic scene with the jar integrated naturally at correct scale."""
 
-    print(f"Generando imagen completa con Gemini ({contexto['nombre']})...")
+    print(f"Generando imagen MESA con Gemini ({contexto['nombre']})...")
 
     response = client_gemini.models.generate_content(
         model="gemini-3-pro-image-preview",
-        contents=[
-            {
-                "parts": [
-                    {
-                        "inline_data": {
-                            "mime_type": media_type,
-                            "data": img_b64,
-                        }
-                    },
-                    {"text": prompt_completo},
-                ]
-            }
-        ],
-        config=gtypes.GenerateContentConfig(
-            response_modalities=["IMAGE", "TEXT"],
-        ),
+        contents=[{"parts": [{"inline_data": {"mime_type": media_type, "data": img_b64}}, {"text": prompt_completo}]}],
+        config=gtypes.GenerateContentConfig(response_modalities=["IMAGE", "TEXT"]),
     )
 
     imagen_bytes = None
@@ -293,9 +278,78 @@ Generate the complete realistic scene with the jar integrated naturally at corre
             break
 
     if imagen_bytes is None:
-        raise ValueError("Gemini no devolvio una imagen")
+        raise ValueError("Gemini no devolvio una imagen (mesa)")
 
-    print("Imagen generada.")
+    print("Imagen MESA generada.")
+    img = Image.open(io.BytesIO(imagen_bytes)).convert("RGB")
+    return img.resize((TAMANO_FINAL, TAMANO_FINAL), Image.LANCZOS)
+
+
+# ─── Paso 2b: Imagen estilo PERSONAS (lifestyle con gente) ────────────────────
+
+def generar_imagen_personas(contexto: dict, indice_botella: int) -> Image.Image:
+    from google import genai
+    from google.genai import types as gtypes
+
+    client_gemini = genai.Client(api_key=os.environ.get("GOOGLE_API_KEY"))
+
+    refs_existentes = [r for r in IMAGENES_REFERENCIA if r.exists()]
+    if not refs_existentes:
+        print("No se encontraron imagenes de referencia.")
+        sys.exit(1)
+    referencia = refs_existentes[(indice_botella + 1) % len(refs_existentes)]
+    print(f"Referencia del dia (personas): {referencia.name}")
+
+    ext = referencia.suffix.lower()
+    media_types = {".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".png": "image/png"}
+    media_type = media_types.get(ext, "image/jpeg")
+    with open(referencia, "rb") as f:
+        img_b64 = base64.standard_b64encode(f.read()).decode("utf-8")
+
+    prompt_completo = f"""You are a professional lifestyle and advertising photographer.
+
+I am giving you the REAL product image of "Salsa Bestial" artisanal hot sauce.
+Your task: generate a complete, photorealistic Instagram lifestyle image featuring REAL PEOPLE enjoying food in this context.
+
+PEOPLE — CRITICAL:
+Include 2-3 real people (friends or family, Latin American appearance, ages 25-40) naturally sharing a meal together.
+People are the HERO of this image — their expressions of enjoyment, laughter, or conversation are the focus.
+The scene must feel authentic and candid, not posed like a stock photo. Capture a genuine moment.
+People should be interacting naturally: passing food, talking, laughing, or adding sauce to their plate.
+
+PRODUCT SIZE — CRITICAL:
+The Salsa Bestial jar (230ml compote-style, ~8cm tall, size of a small jam jar) sits on the table within reach.
+It must appear REALISTICALLY SMALL — much smaller than the plates and dishes around it.
+The jar is a natural part of the table setting, not the main focus.
+Reproduce the jar EXACTLY as shown in the reference: same yellow label, red BESTIAL lettering, gorilla logo, gold lid.
+
+SCENE & REALISM:
+Context: {contexto['nombre']} — {contexto['ambiente']}
+Warm, inviting atmosphere. Natural depth of field with people sharp and background softly blurred.
+Consistent, realistic lighting — no flash look. The image must feel like a real candid photo.
+Square format (1:1), 1080x1080px, professional lifestyle photography quality.
+No text overlays, no watermarks.
+
+Generate the complete realistic lifestyle scene."""
+
+    print(f"Generando imagen PERSONAS con Gemini ({contexto['nombre']})...")
+
+    response = client_gemini.models.generate_content(
+        model="gemini-3-pro-image-preview",
+        contents=[{"parts": [{"inline_data": {"mime_type": media_type, "data": img_b64}}, {"text": prompt_completo}]}],
+        config=gtypes.GenerateContentConfig(response_modalities=["IMAGE", "TEXT"]),
+    )
+
+    imagen_bytes = None
+    for part in response.candidates[0].content.parts:
+        if part.inline_data is not None:
+            imagen_bytes = part.inline_data.data
+            break
+
+    if imagen_bytes is None:
+        raise ValueError("Gemini no devolvio una imagen (personas)")
+
+    print("Imagen PERSONAS generada.")
     img = Image.open(io.BytesIO(imagen_bytes)).convert("RGB")
     return img.resize((TAMANO_FINAL, TAMANO_FINAL), Image.LANCZOS)
 
@@ -325,11 +379,14 @@ def guardar_resultado(imagen: Image.Image, nombre_archivo: str, contexto: dict,
 def generar_imagen_hoy(forzar: bool = False, fecha_override: str = None):
     fecha_hoy = datetime.strptime(fecha_override, "%Y%m%d") if fecha_override else datetime.now()
     fecha_str = fecha_hoy.strftime("%d/%m/%Y")
-    nombre_archivo = f"bestial_{fecha_hoy.strftime('%Y%m%d')}.png"
-    ruta_imagen = CARPETA_INSTAGRAM / nombre_archivo
+    fecha_id = fecha_hoy.strftime('%Y%m%d')
+    nombre_mesa     = f"bestial_{fecha_id}_mesa.png"
+    nombre_personas = f"bestial_{fecha_id}_personas.png"
+    ruta_mesa     = CARPETA_INSTAGRAM / nombre_mesa
+    ruta_personas = CARPETA_INSTAGRAM / nombre_personas
 
-    if ruta_imagen.exists() and not forzar:
-        print(f"Ya existe la imagen de hoy: {nombre_archivo}")
+    if ruta_mesa.exists() and ruta_personas.exists() and not forzar:
+        print(f"Ya existen las imagenes de hoy: {nombre_mesa} y {nombre_personas}")
         print("Usa --forzar para regenerar.")
         return
 
@@ -347,36 +404,49 @@ def generar_imagen_hoy(forzar: bool = False, fecha_override: str = None):
     print(f"\n{'='*60}")
     print(f"  AGENTE IMAGENES INSTAGRAM - {BRAND}")
     print(f"  Fecha: {fecha_str}")
-    print(f"  Estrategia: fondo IA + botella ORIGINAL superpuesta")
+    print(f"  Generando 2 imagenes: MESA + PERSONAS")
     print(f"{'='*60}\n")
 
     historial = cargar_historial()
     contexto = elegir_contexto(historial)
     print(f"Contexto del dia: {contexto['nombre']}\n")
 
-    # 1. Caption con Claude
+    indice_botella = len(historial.get("generaciones", [])) % max(len(IMAGENES_REFERENCIA), 1)
+
+    # 1. Caption con Claude (compartido para ambas imagenes)
     caption_data = generar_caption_claude(contexto, fecha_str)
 
-    # 2. Generar imagen completa con Gemini usando la botella real como referencia
-    indice_botella = len(historial.get("generaciones", [])) % max(len(IMAGENES_REFERENCIA), 1)
-    imagen_final = generar_imagen_con_referencia(contexto, indice_botella)
+    # 2a. Imagen MESA
+    if not ruta_mesa.exists() or forzar:
+        imagen_mesa = generar_imagen_mesa(contexto, indice_botella)
+        guardar_resultado(imagen_mesa, nombre_mesa, contexto, caption_data, fecha_str)
+        historial["generaciones"].append({
+            "fecha": fecha_str,
+            "archivo": nombre_mesa,
+            "tipo": "mesa",
+            "contexto_id": contexto["id"],
+            "contexto_nombre": contexto["nombre"],
+        })
 
-    # 3. Guardar
-    guardar_resultado(imagen_final, nombre_archivo, contexto, caption_data, fecha_str)
+    # 2b. Imagen PERSONAS
+    if not ruta_personas.exists() or forzar:
+        imagen_personas = generar_imagen_personas(contexto, indice_botella)
+        guardar_resultado(imagen_personas, nombre_personas, contexto, caption_data, fecha_str)
+        historial["generaciones"].append({
+            "fecha": fecha_str,
+            "archivo": nombre_personas,
+            "tipo": "personas",
+            "contexto_id": contexto["id"],
+            "contexto_nombre": contexto["nombre"],
+        })
 
-    # 6. Historial
-    historial["generaciones"].append({
-        "fecha": fecha_str,
-        "archivo": nombre_archivo,
-        "contexto_id": contexto["id"],
-        "contexto_nombre": contexto["nombre"],
-    })
     historial["contextos_usados"].append(contexto["id"])
     guardar_historial(historial)
 
-    print(f"\nImagen del dia lista!")
-    print(f"  Archivo: {nombre_archivo}")
-    print(f"  Caption e hashtags en: {nombre_archivo.replace('.png', '.md')}\n")
+    print(f"\nImagenes del dia listas!")
+    print(f"  Mesa:     {nombre_mesa}")
+    print(f"  Personas: {nombre_personas}")
+    print(f"  Caption e hashtags en: bestial_{fecha_id}_mesa.md\n")
 
 
 def listar_imagenes():
