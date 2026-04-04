@@ -310,11 +310,15 @@ Use every reference photo to faithfully reproduce ALL parts of the jar:
 - Lid photo: the branded lid with logo printed on top must match exactly — reproduce it faithfully when the lid is visible
 Do NOT redraw, reinterpret or redesign any part of the product.
 
-JAR SIZE & PLACEMENT:
-- The jar must appear SMALL — 3 to 4 times smaller than a dinner plate or cutting board
+JAR SIZE & PROPORTIONS — STRICTLY ENFORCED:
+The jar is 230ml compote-style — the size of a small jam jar (roughly 8cm tall × 7cm wide).
+MANDATORY size rules — violating any of these is an error:
+- The jar must be SMALLER than a standard drinking glass or cup
+- The jar must be at least 3× smaller in apparent size than a dinner plate or cutting board
 - Place it naturally to the side or corner of the scene, like a condiment left on the table
 - Position the jar so its label faces the camera and is clearly readable
 - Never centered, never dominating the frame
+- If in doubt, make the jar smaller — it is a small product
 
 LIGHTING INTEGRATION — CRITICAL:
 The jar must be lit by the EXACT same light source as every other element in the scene.

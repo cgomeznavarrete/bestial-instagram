@@ -79,15 +79,30 @@ python instagram_agent.py                   # menú interactivo
 - **MESA** (`bestial_YYYYMMDD_mesa.png`): solo comida, sin personas. Frasco como condimento a un lado.
 - **PERSONAS** (`bestial_YYYYMMDD_personas.png`): 2-3 personas latinoamericanas (25-40 años) compartiendo comida. Estilo lifestyle, candidato, no stock photo.
 
-### Frasco — proporciones CRÍTICAS
-- El frasco es de **230ml tipo compota** (~8cm alto × 7cm ancho, tamaño mermelada pequeña).
-- Debe verse **3-4x más pequeño** que un plato o tabla de cortar.
-- Se coloca al costado o esquina como condimento. NUNCA domina el frame.
-- Siempre pasar la imagen de referencia real a Gemini — NUNCA solo descripción de texto.
-- Referencias: `Imagenes Instgram/Salsa Bestial.JPEG` y `Salsa Bestial2.JPEG` (alternan por día).
+### Frasco — proporciones OBLIGATORIAS (regla crítica, no negociable)
+El frasco es de **230ml tipo compota** (~8cm alto × 7cm ancho, tamaño mermelada pequeña).
+Las siguientes reglas se aplican a TODAS las imágenes (mesa y personas). Violarlas es un error grave:
 
-### Apariencia del frasco
-Reproducir EXACTAMENTE: etiqueta amarilla · letras rojas BESTIAL · logo gorila · tapa dorada · vidrio tipo compota.
+- El frasco **SIEMPRE debe ser más pequeño que un vaso o copa** en la escena
+- El frasco debe verse **al menos 3× más pequeño** que un plato o tabla de cortar
+- Si hay una mano sosteniendo el frasco, debe verse natural — como sostener una mermelada, no una botella grande
+- Se coloca al costado o esquina como condimento. **NUNCA domina el frame**
+- En caso de duda, el frasco va más pequeño — es un producto pequeño
+
+### Imágenes de referencia — USO OBLIGATORIO
+Siempre se deben pasar las **3 imágenes** a Gemini en cada generación:
+- `Imagenes Instgram/Salsa Bestial.JPEG` — frasco vista frontal/lateral
+- `Imagenes Instgram/Salsa Bestial2.JPEG` — frasco segunda referencia
+- `Imagenes Instgram/Tapa.jpg` — tapa con logo impreso (crítica para reproducir el logo de la tapa)
+
+**NUNCA** generar el frasco solo con descripción de texto. Las 3 referencias son obligatorias.
+La función `_partes_referencia()` en el script carga y valida las 3 automáticamente.
+
+### Apariencia del frasco — reproducir EXACTAMENTE de las referencias
+- Etiqueta amarilla/dorada · letras rojas BESTIAL · logo gorila (color y estilo exacto de la referencia)
+- Tapa dorada con logo impreso (ver Tapa.jpg)
+- Vidrio tipo compota con salsa oscura visible
+- NO inventar ni modificar ningún elemento del frasco
 
 ---
 
