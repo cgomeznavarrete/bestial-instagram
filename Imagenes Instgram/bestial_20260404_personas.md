@@ -9,14 +9,14 @@ Un picnic sin la salsa correcta es solo comer en el pasto.
 
 Nuestra Salsa Tatemada esta hecha artesanalmente con habaneros rostizados al fuego. Ese sabor ahumado y profundo que convierte cualquier bocado al aire libre en algo que no vas a olvidar.
 
-Llevala a tu proximo picnic y nota la diferencia desde el primer bocado 🔥
+No importa lo que lleves en la canasta — con una Bestial encima, todo sabe a otro nivel 🔥
 
-Haz tu pedido ahora y que no falte en tu canasta:
+Llevala a tu proximo picnic. Haz tu pedido ahora:
 
 ## Caption Story
 
-Tu picnic necesita Salsa Tatemada. Habaneros al fuego, sabor que transforma todo.
-Pedila ahora 🔥
+Tu picnic merece sabor BESTIAL. Salsa Tatemada con habaneros al fuego 🔥
+Pedila ahora y llevala contigo.
 
 ## Hashtags
 

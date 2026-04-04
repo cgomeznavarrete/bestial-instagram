@@ -374,8 +374,16 @@ People should be interacting naturally: passing food, talking, laughing, or addi
 JAR — COPY FROM REFERENCES EXACTLY:
 - Front/side photos: jar shape, glass, label colors, gorilla logo, BESTIAL lettering
 - Lid photo: branded lid with logo on top — reproduce faithfully when visible
-The jar sits naturally on the table within reach of the people. Small condiment size — much smaller than the plates.
 Do NOT redraw, reinterpret or redesign any part of the product.
+
+JAR SIZE & PROPORTIONS — STRICTLY ENFORCED:
+The jar is 230ml compote-style — the size of a small jam jar (roughly 8cm tall × 7cm wide).
+MANDATORY size rules — violating any of these is an error:
+- The jar must be SMALLER than a standard drinking glass or cup
+- The jar must be SMALLER than a dinner plate (at least 3× smaller in apparent size)
+- A person's hand holding the jar must look natural — like holding a jam jar, not a large bottle
+- Place the jar to the side of the scene as a condiment, never dominating the frame
+If in doubt, make the jar smaller — it is a small product.
 
 SCENE & REALISM:
 Context: {contexto['nombre']} — {contexto['ambiente']}
