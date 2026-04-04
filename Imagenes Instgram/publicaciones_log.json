@@ -13,9 +13,19 @@
       "ig_media_id": "18072724835233531"
     }
   ],
-  "stories": [],
+  "stories": [
+    {
+      "fecha": "04/04/2026 14:43",
+      "archivo": "bestial_20260404_personas.png",
+      "tipo": "story",
+      "ig_media_id": "18073559321218008",
+      "contexto_id": "picnic_campo",
+      "metricas": {}
+    }
+  ],
   "publicados": [
     "post:bestial_20260402.png",
-    "post:bestial_20260403_personas.png"
+    "post:bestial_20260403_personas.png",
+    "story:bestial_20260404_personas.png"
   ]
 }
