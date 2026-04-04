@@ -56,84 +56,98 @@ CONTEXTOS = [
         "nombre": "Asado familiar",
         "fondo_prompt": "Rustic wooden cutting board on a backyard BBQ table. Around the board: juicy grilled beef ribs with char marks, a choripan sandwich, grilled chicken on a steel grill grate with glowing coals and wisps of white smoke. Warm golden-hour afternoon sunlight. Blurred background: green backyard, family gathering around the BBQ. Professional food photography, no bottles, no labels, no products.",
         "ambiente": "tarde dorada, jardín, humo de parrilla",
+        "hashtags": ["#asado", "#parrillada", "#asadocolombiano", "#familytime", "#bbqtime", "#carnealaparrilla"],
     },
     {
         "id": "parrilla_premium",
         "nombre": "Parrilla premium",
         "fondo_prompt": "Dark dramatic close-up of a professional steel BBQ grill with glowing orange coals, a thick juicy T-bone steak sizzling on the grate with char marks and steam. Dramatic fire light from below, moody dark background, ember sparks. No bottles, no labels, no products. Professional food photography.",
         "ambiente": "luz dramática de brasas, fondo oscuro",
+        "hashtags": ["#parrilla", "#steaklovers", "#asadorpremium", "#grillmaster", "#carnedeRes", "#parrillero"],
     },
     {
         "id": "mesa_madera_rustica",
         "nombre": "Mesa de madera rústica",
         "fondo_prompt": "Rustic reclaimed wood table top, natural morning light from a window. Around the center space: fresh red chili peppers, garlic cloves, herbs (cilantro, parsley), a wooden spoon, open tacos on a wooden board, lime halves. Warm natural tones. No bottles, no labels, no products. Professional food photography.",
         "ambiente": "luz natural de mañana, mesa rústica",
+        "hashtags": ["#mesarustica", "#comidareal", "#instafood", "#homecooked", "#foodstyling", "#comidalatina"],
     },
     {
         "id": "evento_deportivo",
         "nombre": "Evento deportivo",
         "fondo_prompt": "Living room watch party setup. On a wooden coffee table: a bowl of nachos with melted cheese, buffalo chicken wings on a plate, a spread of game day snacks. Blurred background: large TV screen showing a soccer/football match, friends cheering. Warm indoor lighting. No bottles, no labels, no products. Lifestyle food photography.",
         "ambiente": "sala de estar, partido en TV, amigos",
+        "hashtags": ["#watchparty", "#futbol", "#gamefood", "#snacktime", "#friendsandfood", "#deportes"],
     },
     {
         "id": "cocina_moderna",
         "nombre": "Cocina moderna",
         "fondo_prompt": "Modern kitchen marble countertop, bright clean lighting. Around the center: a freshly made gourmet pizza with toppings (pepperoni, fresh basil, mozzarella), scattered fresh ingredients, a wooden pizza cutter. Clean white and grey tones with warm accent light. No bottles, no labels, no products. Professional food photography.",
         "ambiente": "cocina limpia, luz brillante, mármol",
+        "hashtags": ["#cocinamoderna", "#pizzalovers", "#gourmet", "#foodphotography", "#cheflife", "#receta"],
     },
     {
         "id": "picnic_campo",
         "nombre": "Picnic al aire libre",
         "fondo_prompt": "Outdoor picnic setup on green grass, golden afternoon sunlight. A woven picnic blanket with gourmet sandwiches, a wooden cheese board with crackers and grapes, fresh vegetables, a wicker basket. Blurred background: trees and sunlit meadow. No bottles, no labels, no products. Lifestyle food photography.",
         "ambiente": "campo verde, luz de tarde, manta de picnic",
+        "hashtags": ["#picnic", "#airlibre", "#naturaleza", "#outdoorfood", "#campestre", "#finde"],
     },
     {
         "id": "terraza_noche",
         "nombre": "Terraza nocturna",
         "fondo_prompt": "Rooftop terrace at night, warm string lights overhead. On a dark wood table: a plate of tapas and pinchos, mini burgers, skewers of grilled meat, small bowls of dipping sauces. Blurred background: city skyline at night with lights. Warm bokeh lighting. No bottles, no labels, no products. Lifestyle food photography.",
         "ambiente": "terraza, noche, luces de ciudad",
+        "hashtags": ["#terrazanocturna", "#viernes", "#nightout", "#sobremesa", "#tapas", "#ciudadnocturna"],
     },
     {
         "id": "playa_verano",
         "nombre": "Playa y verano",
         "fondo_prompt": "Beach picnic table, golden hour sunlight. On a weathered wooden table: grilled shrimp skewers, fish tacos on corn tortillas, lime wedges, fresh mango salsa in a bowl. Blurred background: tropical beach, palm trees, ocean waves. Warm summer colors. No bottles, no labels, no products. Professional food photography.",
         "ambiente": "playa, verano, luz dorada",
+        "hashtags": ["#playa", "#verano", "#vacaciones", "#seafood", "#playacolombia", "#tropicalfood"],
     },
     {
         "id": "cumpleanos_fiesta",
         "nombre": "Fiesta y celebración",
         "fondo_prompt": "Festive party table, colorful decoration. On the table: buffalo chicken wings, mini sliders, a bowl of nachos, party appetizers on small plates. Blurred background: colorful balloons, confetti, celebration mood, string lights. Warm festive lighting. No bottles, no labels, no products. Lifestyle food photography.",
         "ambiente": "fiesta, globos, luces de celebración",
+        "hashtags": ["#cumpleanos", "#fiesta", "#partyfood", "#celebracion", "#appetizers", "#birthdayparty"],
     },
     {
         "id": "desayuno_brunch",
         "nombre": "Desayuno / Brunch",
         "fondo_prompt": "Bright cozy brunch table, white linen tablecloth, morning light from a window. On the table: scrambled eggs on toast, a shakshuka pan with poached eggs, fresh herbs on top, sliced avocado, coffee cup. Soft warm morning tones. No bottles, no labels, no products. Professional food photography.",
         "ambiente": "mañana luminosa, desayuno, lino blanco",
+        "hashtags": ["#brunch", "#desayuno", "#brunchtime", "#morningvibes", "#weekendbrunch", "#huevos"],
     },
     {
         "id": "street_food",
         "nombre": "Street food / Mercado",
         "fondo_prompt": "Vibrant street food market stall, colorful and energetic atmosphere. On a wooden counter: freshly made tacos al pastor with cilantro and onion, a steaming corn on the cob (elote), fresh lime wedges. Blurred background: busy market with colorful stalls and lights. No bottles, no labels, no products. Lifestyle food photography.",
         "ambiente": "mercado, colores vivos, ambiente urbano",
+        "hashtags": ["#streetfood", "#mercado", "#comidacallejera", "#tacos", "#antojitos", "#foodmarket"],
     },
     {
         "id": "cocina_campo",
         "nombre": "Cocina de campo / Rancho",
         "fondo_prompt": "Rustic ranch kitchen, warm wood fire light. On a rough hewn wooden table: a cast iron skillet with a whole roasted chicken, fresh rosemary, roasted garlic, crusty bread on a wooden board. Warm amber firelight, stone wall background. No bottles, no labels, no products. Professional food photography.",
         "ambiente": "fogón de leña, cocina rústica, hierro fundido",
+        "hashtags": ["#cocinacampo", "#rancho", "#fogon", "#comidarustica", "#cocinacriolla", "#campo"],
     },
     {
         "id": "post_entrenamiento",
         "nombre": "Post entrenamiento / Healthy",
         "fondo_prompt": "Clean healthy meal prep table, bright modern kitchen. On the table: grilled chicken breast sliced, a protein bowl with rice and vegetables, fresh salad, sliced avocado, lemon wedges. Clean white and green tones, natural daylight. No bottles, no labels, no products. Food photography, healthy lifestyle.",
         "ambiente": "cocina moderna, comida saludable, luz natural",
+        "hashtags": ["#postworkout", "#saludable", "#healthyfood", "#mealprep", "#fitness", "#comidasana"],
     },
     {
         "id": "mesa_restaurante",
         "nombre": "Mesa de restaurante",
         "fondo_prompt": "Elegant restaurant table, candlelight ambiance. On the dark wood table: a gourmet smash burger with lettuce and tomato on a wooden board, a side of crispy fries in a metal basket, a small ramekin of dipping sauce. Warm candlelight, blurred restaurant background. No bottles, no labels, no products. Professional food photography.",
         "ambiente": "restaurante, velas, ambiente elegante",
+        "hashtags": ["#restaurante", "#finedining", "#burgerlovers", "#cenaconestilo", "#gourmet", "#restaurantecol"],
     },
 ]
 
@@ -190,20 +204,33 @@ EJEMPLO DE LO QUE NO DEBES HACER (estilo incorrecto):
 - "El mercado huele a gloria y tu antojo ya esta gritando — sin una Bestial encima le falta alma" (demasiado informal, sin CTA comercial)
 - Frases solo de hype sin mencionar el producto o invitar a pedirlo."""
 
+    hashtags_contexto = " ".join(contexto.get("hashtags", []))
+    hashtags_marca = "#salsasbestial #salsatatemada #picante #bestial"
+
     prompt = f"""Crea el contenido para un post de Instagram de {BRAND}.
 Contexto de la imagen: {contexto['nombre']} — {contexto['ambiente']}
 Fecha: {fecha_str}
 
-El caption debe:
+El caption (para el FEED) debe:
 1. Abrir con una frase que conecte el contexto con la necesidad de la salsa.
 2. Describir el producto (Salsa Tatemada, habaneros al fuego, sabor ahumado) de forma apetitosa.
 3. Cerrar con llamado a la accion para hacer el pedido.
 4. Tener entre 4 y 6 lineas. Sin listas. Sin bullets.
 
+La caption_story (para STORIES de Instagram) debe:
+- Ser una version ultra-corta del caption: maximo 2 lineas.
+- Tono directo e impactante. Terminar con CTA fuerte (ej: "Pedila ahora 🔥").
+- No mas de 2 emojis.
+
+Hashtags del contexto (usar todos): {hashtags_contexto}
+Hashtags de marca (agregar siempre): {hashtags_marca}
+Total de hashtags en el array: entre 9 y 11.
+
 Devuelve solo este JSON (sin markdown):
 {{
   "caption": "texto completo del post con saltos de linea",
-  "hashtags": ["#tag1", "#tag2", "#tag3", "#tag4", "#tag5", "#tag6", "#tag7", "#tag8"]
+  "caption_story": "version corta para story, max 2 lineas",
+  "hashtags": ["#tag1", "#tag2", "#tag3", "#tag4", "#tag5", "#tag6", "#tag7", "#tag8", "#tag9", "#tag10"]
 }}"""
 
     respuesta = client.messages.create(
@@ -238,30 +265,38 @@ def generar_imagen_mesa(contexto: dict, indice_botella: int) -> Image.Image:
     with open(referencia, "rb") as f:
         img_b64 = base64.standard_b64encode(f.read()).decode("utf-8")
 
-    prompt_completo = f"""You are a professional food photographer and advertising creative director.
-
-I am giving you the REAL product image of "Salsa Bestial" artisanal hot sauce.
-Your task: generate a complete, photorealistic Instagram marketing image for this product.
+    prompt_completo = f"""You are a professional food photographer shooting a real campaign for "Salsa Bestial" hot sauce.
+Generate a single photorealistic image where the product sits NATURALLY in the scene — as if everything was photographed together in one shot.
 NO people in this image — food and product only.
 
-PRODUCT SIZE — CRITICAL:
-The jar is a 230ml glass compote-style jar, approximately 8cm tall and 7cm wide — the size of a small jam or baby food jar.
-It must appear REALISTICALLY SMALL compared to the food elements in the scene.
-A dinner plate, cutting board or salad bowl should be visibly 3-4x larger than the jar.
-Place the jar naturally to the side or corner of the scene, like a condiment would be placed at a table.
-NEVER make the jar dominate the frame or appear larger than the main food elements.
+JAR LABEL — REPRODUCE EXACTLY (critical):
+- Jar shape: short wide compote-style glass, 230ml (8cm tall × 7cm wide) — size of a small jam jar
+- Label background: solid BRIGHT YELLOW
+- Top of label: a bold BLACK GORILLA head/face mascot, clearly visible and prominent
+- Center: the word "BESTIAL" in large, bold RED capital letters
+- Below BESTIAL: smaller dark text "Salsa Tatemada Ahumada"
+- Lid: GOLD metallic, slightly domed
+- Glass: clear with dark amber sauce visible inside
+- The gorilla mascot and "BESTIAL" lettering MUST be clearly legible — do not shrink or omit them
 
-LABEL & APPEARANCE — CRITICAL:
-Reproduce the jar EXACTLY as shown in the reference image: same glass shape, same yellow label, same red BESTIAL lettering, same gorilla logo, same gold lid. Do NOT invent or modify anything.
-The label must be fully readable and faithful to the reference.
+JAR SIZE & PLACEMENT:
+- The jar must appear SMALL — 3 to 4 times smaller than a dinner plate or cutting board
+- Place it naturally at the side or corner of the scene, like a condiment someone left on the table
+- Never centered, never dominating the frame
 
-SCENE & REALISM:
+LIGHTING INTEGRATION — MOST CRITICAL:
+The jar must be lit by the EXACT same light source as every other element in the scene.
+- If the scene has warm firelight/golden hour: the jar's right side glows amber-orange, left side in cool shadow
+- If the scene has cool window light: the jar has soft cool highlights and warm fill
+- The jar's glass must show reflections of surrounding elements (flames, food, surfaces)
+- The gold lid catches the dominant light just like metal objects in the scene do
+- Cast a realistic shadow from the jar onto the table surface below it
+- This MUST look like one coherent photograph — NOT a product pasted onto a background
+
+SCENE:
 Context: {contexto['nombre']} — {contexto['fondo_prompt']}
-The scene must look like a real photograph, not a CGI render. Use natural depth of field, realistic shadows, and consistent lighting across the jar and food elements.
-Square format (1:1), 1080x1080px, professional food photography quality.
-No text overlays, no watermarks.
-
-Generate the complete realistic scene with the jar integrated naturally at correct scale."""
+Shoot from a natural food-photography angle (slightly elevated, 30-45 degrees). Realistic depth of field.
+Square format (1:1), 1080x1080px. No text overlays, no watermarks."""
 
     print(f"Generando imagen MESA con Gemini ({contexto['nombre']})...")
 
@@ -366,8 +401,12 @@ def guardar_resultado(imagen: Image.Image, nombre_archivo: str, contexto: dict,
     ruta_md = CARPETA_INSTAGRAM / nombre_md
     with open(ruta_md, "w", encoding="utf-8") as f:
         f.write(f"# Imagen Instagram - {fecha_str}\n\n")
-        f.write(f"**Contexto:** {contexto['nombre']}\n\n")
+        f.write(f"**Contexto:** {contexto['nombre']}\n")
+        f.write(f"**Contexto ID:** {contexto['id']}\n\n")
         f.write(f"## Caption\n\n{caption_data.get('caption', '')}\n\n")
+        caption_story = caption_data.get("caption_story", "")
+        if caption_story:
+            f.write(f"## Caption Story\n\n{caption_story}\n\n")
         hashtags = " ".join(caption_data.get("hashtags", []))
         f.write(f"## Hashtags\n\n{hashtags}\n")
     print(f"Metadata guardada: {ruta_md.name}")
