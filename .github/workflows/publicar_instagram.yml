@@ -55,6 +55,24 @@ jobs:
             fi
           fi
 
+      # Para STORIES: preparar imagen y subirla a GitHub ANTES de publicar
+      # Instagram necesita descargar la imagen desde una URL pública
+      - name: Preparar imagen story y subir a GitHub
+        if: steps.tipo.outputs.tipo == 'story'
+        env:
+          INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
+          INSTAGRAM_BUSINESS_ACCOUNT_ID: ${{ secrets.INSTAGRAM_BUSINESS_ACCOUNT_ID }}
+          GITHUB_REPO: ${{ github.repository }}
+        run: |
+          python publicar_instagram.py --preparar-story
+          git config user.name "Bestial Bot"
+          git config user.email "cgomeznavarrete@gmail.com"
+          git add "Imagenes Instgram/"
+          git diff --staged --quiet || git commit -m "Story preparada $(date +%Y%m%d)"
+          git push
+          echo "Esperando 20 segundos para que GitHub CDN propague la imagen..."
+          sleep 20
+
       - name: Publicar en Instagram
         env:
           INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}

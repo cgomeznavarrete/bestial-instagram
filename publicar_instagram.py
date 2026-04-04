@@ -811,13 +811,22 @@ def main():
 
 
 if __name__ == "__main__":
-    # Modo automático CLI: python publicar_instagram.py --post | --story
+    # Modo automático CLI: python publicar_instagram.py --post | --story | --preparar-story
     if len(sys.argv) > 1:
         _validar_credenciales()
         if sys.argv[1] == "--post":
             tarea_post()
         elif sys.argv[1] == "--story":
             tarea_story()
+        elif sys.argv[1] == "--preparar-story":
+            # Solo prepara la imagen story (9:16) y la guarda en disco.
+            # Usado por GitHub Actions para subirla al repo ANTES de publicar.
+            imagen = seleccionar_imagen("story")
+            if imagen:
+                _adaptar_story(imagen["ruta"])
+                print(f"  Story preparada: {imagen['archivo']}")
+            else:
+                print("  ⚠️  No hay imágenes disponibles para story.")
         else:
             print(f"Argumento desconocido: {sys.argv[1]}")
             sys.exit(1)
