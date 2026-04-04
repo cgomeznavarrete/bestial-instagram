@@ -22,7 +22,9 @@ PC Local (cuando está encendido)
 ## Scripts principales
 
 ### `generar_imagen_diaria.py`
-Genera 2 imágenes por día usando Claude (caption) + Gemini (imagen con referencia real del frasco).
+Genera 2 imágenes por día usando Claude (caption + caption_story) + Gemini (imagen con referencia real del frasco).
+Claude devuelve JSON con `caption` (feed), `caption_story` (story, max 2 líneas) y `hashtags` contextuales.
+Cada contexto tiene 6 hashtags propios + 4 de marca fija (`#salsasbestial #salsatatemada #picante #bestial`).
 
 ```bash
 python generar_imagen_diaria.py              # genera las imágenes de hoy
@@ -32,12 +34,27 @@ python generar_imagen_diaria.py --listar    # muestra historial
 
 ### `publicar_instagram.py`
 Publica posts y stories en Instagram vía Graph API. Las imágenes se sirven desde GitHub raw.
+Alterna automáticamente entre post individual y carousel (MESA+PERSONAS) por semana:
+- **Semanas impares** → post individual (imagen MESA o PERSONAS)
+- **Semanas pares** → carousel con ambas imágenes del día
+
+Al publicar una story muestra el `caption_story` como texto sugerido para agregar como sticker manualmente.
 
 ```bash
-python publicar_instagram.py                # menú interactivo
-python publicar_instagram.py --post         # publica un post ahora
+python publicar_instagram.py                # menú interactivo (8 opciones)
+python publicar_instagram.py --post         # publica un post ahora (respeta semana carousel/individual)
 python publicar_instagram.py --story        # publica una story ahora
 ```
+
+**Opciones del menú interactivo**:
+1. Publicar POST ahora
+2. Publicar STORY ahora
+3. Ver imágenes disponibles
+4. Ver historial de publicaciones
+5. Activar modo automático (horario semanal)
+6. **Actualizar métricas desde Instagram** (reach, likes, guardados por post)
+7. **Ver reporte de rendimiento por contexto** (ranking qué contextos funcionan mejor)
+8. Salir
 
 ### `descargar_imagenes.py`
 Descarga desde GitHub los archivos nuevos `bestial_*.png` y `historial_generaciones.json`.
@@ -78,16 +95,25 @@ Reproducir EXACTAMENTE: etiqueta amarilla · letras rojas BESTIAL · logo gorila
 
 **Tono**: comercial, directo, apasionado. Habla de TÚ. Máx 2-3 emojis con intención.
 
-**Estructura obligatoria**:
+### Caption (feed) — estructura obligatoria
 1. Frase que conecta el contexto con la necesidad de la salsa
 2. Describe el producto: Salsa Tatemada, habaneros rostizados al fuego, sabor ahumado
 3. Cierre con CTA claro para hacer el pedido
+4. Entre 4 y 6 líneas. Sin listas ni bullets.
 
 **Ejemplo aprobado**:
 > "Hay comidas que saben bien... y comidas que saben BESTIAL.
 > La diferencia está en la salsa.
 > Nuestra Salsa Tatemada es hecha artesanalmente con habaneros rostizados al fuego. Ese sabor ahumado y profundo que transforma cualquier comida.
 > Haz tu pedido ahora."
+
+### Caption Story — versión corta
+- Máximo 2 líneas. Tono impactante y directo.
+- CTA fuerte al final (ej: "Pedila ahora 🔥").
+- Máx 2 emojis.
+- Se muestra en consola al publicar una story para agregarlo manualmente como sticker de texto.
+
+**Ejemplo**: `Tu asado merece una Bestial. Pedila ahora 🔥`
 
 **Evitar**:
 - Frases solo de hype sin mencionar el producto ni invitar a pedirlo
@@ -99,24 +125,28 @@ Reproducir EXACTAMENTE: etiqueta amarilla · letras rojas BESTIAL · logo gorila
 
 ## Contextos disponibles (14) — rotan automáticamente por menor uso
 
-| ID | Nombre |
-|----|--------|
-| `asado_familiar` | Asado familiar |
-| `parrilla_premium` | Parrilla premium |
-| `mesa_madera_rustica` | Mesa de madera rústica |
-| `evento_deportivo` | Evento deportivo |
-| `cocina_moderna` | Cocina moderna |
-| `picnic_campo` | Picnic al aire libre |
-| `terraza_noche` | Terraza nocturna |
-| `playa_verano` | Playa y verano |
-| `cumpleanos_fiesta` | Fiesta y celebración |
-| `desayuno_brunch` | Desayuno / Brunch |
-| `street_food` | Street food / Mercado |
-| `cocina_campo` | Cocina de campo / Rancho |
-| `post_entrenamiento` | Post entrenamiento / Healthy |
-| `mesa_restaurante` | Mesa de restaurante |
+Cada contexto tiene 6 hashtags propios que Claude combina con los 4 de marca fija.
+El `.md` de cada imagen guarda `**Contexto ID:**` para que analytics pueda agrupar por contexto.
+
+| ID | Nombre | Hashtags contextuales |
+|----|--------|-----------------------|
+| `asado_familiar` | Asado familiar | #asado #parrillada #asadocolombiano #familytime #bbqtime #carnealaparrilla |
+| `parrilla_premium` | Parrilla premium | #parrilla #steaklovers #asadorpremium #grillmaster #carnedeRes #parrillero |
+| `mesa_madera_rustica` | Mesa de madera rústica | #mesarustica #comidareal #instafood #homecooked #foodstyling #comidalatina |
+| `evento_deportivo` | Evento deportivo | #watchparty #futbol #gamefood #snacktime #friendsandfood #deportes |
+| `cocina_moderna` | Cocina moderna | #cocinamoderna #pizzalovers #gourmet #foodphotography #cheflife #receta |
+| `picnic_campo` | Picnic al aire libre | #picnic #airlibre #naturaleza #outdoorfood #campestre #finde |
+| `terraza_noche` | Terraza nocturna | #terrazanocturna #viernes #nightout #sobremesa #tapas #ciudadnocturna |
+| `playa_verano` | Playa y verano | #playa #verano #vacaciones #seafood #playacolombia #tropicalfood |
+| `cumpleanos_fiesta` | Fiesta y celebración | #cumpleanos #fiesta #partyfood #celebracion #appetizers #birthdayparty |
+| `desayuno_brunch` | Desayuno / Brunch | #brunch #desayuno #brunchtime #morningvibes #weekendbrunch #huevos |
+| `street_food` | Street food / Mercado | #streetfood #mercado #comidacallejera #tacos #antojitos #foodmarket |
+| `cocina_campo` | Cocina de campo / Rancho | #cocinacampo #rancho #fogon #comidarustica #cocinacriolla #campo |
+| `post_entrenamiento` | Post entrenamiento / Healthy | #postworkout #saludable #healthyfood #mealprep #fitness #comidasana |
+| `mesa_restaurante` | Mesa de restaurante | #restaurante #finedining #burgerlovers #cenaconestilo #gourmet #restaurantecol |
 
 El historial y frecuencia de uso se guarda en `Imagenes Instgram/historial_generaciones.json`.
+Las métricas de rendimiento por contexto se acumulan en `Imagenes Instgram/publicaciones_log.json`.
 
 ---
 
@@ -204,3 +234,33 @@ pip install anthropic google-genai pillow requests
 - **Modelo de imagen**: `gemini-3-pro-image-preview` — requiere cuenta Google con plan de pago
 - **Modelo de caption**: `claude-opus-4-6`
 - **Descarga automática local**: `descargar_imagenes.bat` en carpeta Startup de Windows (`C:/Users/cgome/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup/`)
+
+### Formato del archivo `.md` por imagen
+Cada imagen generada tiene un `.md` con esta estructura:
+```
+# Imagen Instagram - DD/MM/YYYY
+
+**Contexto:** Nombre del contexto
+**Contexto ID:** id_del_contexto
+
+## Caption
+
+Texto completo para el feed (4-6 líneas)
+
+## Caption Story
+
+Texto corto para story (max 2 líneas + CTA)
+
+## Hashtags
+
+#tag1 #tag2 ... (9-11 hashtags: 6 contextuales + 4 de marca + 1 extra)
+```
+
+### Analytics — permisos requeridos
+Las métricas de reach/impressions requieren que el token tenga el permiso `instagram_manage_insights`.
+Si el token no tiene ese permiso, `actualizar_metricas` captura el error silenciosamente y solo guarda `likes` y `comments` (que sí están disponibles con permisos básicos).
+
+### Carousel — lógica de alternancia
+- Semanas impares (1, 3, 5…): post individual. `seleccionar_imagen("post")` elige la más reciente no publicada.
+- Semanas pares (2, 4, 6…): carousel MESA+PERSONAS. `_buscar_par_del_dia()` busca el par más reciente donde ambas imágenes estén sin publicar.
+- Si no hay par disponible en semana par, cae automáticamente a modo individual.
