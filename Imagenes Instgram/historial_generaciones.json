@@ -125,6 +125,48 @@
       "tipo": "personas",
       "contexto_id": "mesa_madera_rustica",
       "contexto_nombre": "Mesa de madera rústica"
+    },
+    {
+      "fecha": "04/04/2026",
+      "archivo": "bestial_20260404_mesa.png",
+      "tipo": "mesa",
+      "contexto_id": "evento_deportivo",
+      "contexto_nombre": "Evento deportivo"
+    },
+    {
+      "fecha": "04/04/2026",
+      "archivo": "bestial_20260404_personas.png",
+      "tipo": "personas",
+      "contexto_id": "evento_deportivo",
+      "contexto_nombre": "Evento deportivo"
+    },
+    {
+      "fecha": "04/04/2026",
+      "archivo": "bestial_20260404_mesa.png",
+      "tipo": "mesa",
+      "contexto_id": "cocina_moderna",
+      "contexto_nombre": "Cocina moderna"
+    },
+    {
+      "fecha": "04/04/2026",
+      "archivo": "bestial_20260404_personas.png",
+      "tipo": "personas",
+      "contexto_id": "cocina_moderna",
+      "contexto_nombre": "Cocina moderna"
+    },
+    {
+      "fecha": "04/04/2026",
+      "archivo": "bestial_20260404_mesa.png",
+      "tipo": "mesa",
+      "contexto_id": "picnic_campo",
+      "contexto_nombre": "Picnic al aire libre"
+    },
+    {
+      "fecha": "04/04/2026",
+      "archivo": "bestial_20260404_personas.png",
+      "tipo": "personas",
+      "contexto_id": "picnic_campo",
+      "contexto_nombre": "Picnic al aire libre"
     }
   ],
   "contextos_usados": [
@@ -144,6 +186,9 @@
     "mesa_restaurante",
     "asado_familiar",
     "parrilla_premium",
-    "mesa_madera_rustica"
+    "mesa_madera_rustica",
+    "evento_deportivo",
+    "cocina_moderna",
+    "picnic_campo"
   ]
 }

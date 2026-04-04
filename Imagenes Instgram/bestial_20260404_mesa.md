@@ -1,17 +1,23 @@
 # Imagen Instagram - 04/04/2026
 
-**Contexto:** Mesa de madera rústica
+**Contexto:** Picnic al aire libre
+**Contexto ID:** picnic_campo
 
 ## Caption
 
-Esa mesa ya esta puesta, la luz de la mañana entra perfecta... pero todavia falta lo mas importante.
+Un picnic sin la salsa correcta es solo comer en el pasto.
 
-Nuestra Salsa Tatemada llega para completar el cuadro. Habaneros rostizados al fuego, un sabor ahumado y profundo que convierte cualquier desayuno, comida o cena en algo que no vas a olvidar.
+Nuestra Salsa Tatemada esta hecha artesanalmente con habaneros rostizados al fuego. Ese sabor ahumado y profundo que convierte cualquier bocado al aire libre en algo que no vas a olvidar.
 
-Una vez que la pruebas, esa mesa rustica no vuelve a estar completa sin ella 🔥
+Llevala a tu proximo picnic y nota la diferencia desde el primer bocado 🔥
 
-Haz tu pedido ahora y dale a tu mesa lo que le falta:
+Haz tu pedido ahora y que no falte en tu canasta:
+
+## Caption Story
+
+Tu picnic necesita Salsa Tatemada. Habaneros al fuego, sabor que transforma todo.
+Pedila ahora 🔥
 
 ## Hashtags
 
-#SalsasBestial #SalsaTatemada #HabaneroAlFuego #SaborAhumado #SalsaArtesanal #HechaConFuego #MesaBestial #PicanteBestial
+#picnic #airelibre #naturaleza #outdoorfood #campestre #finde #salsasbestial #salsatatemada #picante #bestial

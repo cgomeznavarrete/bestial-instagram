@@ -43,6 +43,8 @@ IMAGENES_REFERENCIA = [
     CARPETA_INSTAGRAM / "Salsa Bestial.JPEG",
     CARPETA_INSTAGRAM / "Salsa Bestial2.JPEG",
 ]
+# Imagen de referencia de la tapa (siempre se envía junto al frasco)
+IMAGEN_TAPA = CARPETA_INSTAGRAM / "Tapa.jpg"
 HISTORIAL_JSON = CARPETA_INSTAGRAM / "historial_generaciones.json"
 
 BRAND = "Salsas Bestial"
@@ -244,6 +246,49 @@ Devuelve solo este JSON (sin markdown):
     return json.loads(texto)
 
 
+# ─── Utilidad: cargar imagen de referencia en base64 ──────────────────────────
+
+def _cargar_imagen_b64(ruta: Path) -> dict:
+    """Carga una imagen y devuelve el dict inline_data para Gemini."""
+    ext = ruta.suffix.lower()
+    media_types = {".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".png": "image/png"}
+    media_type = media_types.get(ext, "image/jpeg")
+    with open(ruta, "rb") as f:
+        data = base64.standard_b64encode(f.read()).decode("utf-8")
+    return {"inline_data": {"mime_type": media_type, "data": data}}
+
+
+def _partes_referencia(indice_botella: int) -> list:
+    """
+    Devuelve siempre las 3 partes de referencia del producto:
+      1. Salsa Bestial.JPEG o Salsa Bestial2.JPEG (alternando)
+      2. La otra imagen del frasco
+      3. Tapa.jpg — imprescindible para reproducir el logo de la tapa
+    """
+    refs_existentes = [r for r in IMAGENES_REFERENCIA if r.exists()]
+    if not refs_existentes:
+        print("ERROR: No se encontraron imagenes de referencia del frasco.")
+        sys.exit(1)
+
+    # Alternar entre las dos fotos del frasco
+    ref_principal = refs_existentes[indice_botella % len(refs_existentes)]
+    ref_secundaria = refs_existentes[(indice_botella + 1) % len(refs_existentes)]
+
+    partes = [_cargar_imagen_b64(ref_principal)]
+    if ref_secundaria != ref_principal:
+        partes.append(_cargar_imagen_b64(ref_secundaria))
+
+    # Siempre incluir la tapa
+    if IMAGEN_TAPA.exists():
+        partes.append(_cargar_imagen_b64(IMAGEN_TAPA))
+        print(f"Referencias: {ref_principal.name} + {ref_secundaria.name} + {IMAGEN_TAPA.name}")
+    else:
+        print(f"ADVERTENCIA: {IMAGEN_TAPA.name} no encontrada — el logo de la tapa puede fallar")
+        print(f"Referencias: {ref_principal.name} + {ref_secundaria.name}")
+
+    return partes
+
+
 # ─── Paso 2a: Imagen estilo MESA (comida, sin personas) ───────────────────────
 
 def generar_imagen_mesa(contexto: dict, indice_botella: int) -> Image.Image:
@@ -252,57 +297,43 @@ def generar_imagen_mesa(contexto: dict, indice_botella: int) -> Image.Image:
 
     client_gemini = genai.Client(api_key=os.environ.get("GOOGLE_API_KEY"))
 
-    refs_existentes = [r for r in IMAGENES_REFERENCIA if r.exists()]
-    if not refs_existentes:
-        print("No se encontraron imagenes de referencia.")
-        sys.exit(1)
-    referencia = refs_existentes[indice_botella % len(refs_existentes)]
-    print(f"Referencia del dia: {referencia.name}")
-
-    ext = referencia.suffix.lower()
-    media_types = {".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".png": "image/png"}
-    media_type = media_types.get(ext, "image/jpeg")
-    with open(referencia, "rb") as f:
-        img_b64 = base64.standard_b64encode(f.read()).decode("utf-8")
+    partes_ref = _partes_referencia(indice_botella)
 
     prompt_completo = f"""You are a professional food photographer shooting a real campaign for "Salsa Bestial" hot sauce.
-Generate a single photorealistic image where the product sits NATURALLY in the scene — as if everything was photographed together in one shot.
+I am providing {len(partes_ref)} reference photos of the REAL product: views of the jar from the front/side AND a top-down view of the lid.
+Reproduce the jar EXACTLY as it appears in these photos — no changes to shape, label, colors, logo, typography, or lid branding.
 NO people in this image — food and product only.
 
-JAR LABEL — REPRODUCE EXACTLY (critical):
-- Jar shape: short wide compote-style glass, 230ml (8cm tall × 7cm wide) — size of a small jam jar
-- Label background: solid BRIGHT YELLOW
-- Top of label: a bold BLACK GORILLA head/face mascot, clearly visible and prominent
-- Center: the word "BESTIAL" in large, bold RED capital letters
-- Below BESTIAL: smaller dark text "Salsa Tatemada Ahumada"
-- Lid: GOLD metallic, slightly domed
-- Glass: clear with dark amber sauce visible inside
-- The gorilla mascot and "BESTIAL" lettering MUST be clearly legible — do not shrink or omit them
+JAR — COPY FROM REFERENCES EXACTLY:
+Use every reference photo to faithfully reproduce ALL parts of the jar:
+- Front/side photos: jar shape, glass, label colors, gorilla logo on label, BESTIAL lettering, sauce visible through glass
+- Lid photo: the branded lid with logo printed on top must match exactly — reproduce it faithfully when the lid is visible
+Do NOT redraw, reinterpret or redesign any part of the product.
 
 JAR SIZE & PLACEMENT:
 - The jar must appear SMALL — 3 to 4 times smaller than a dinner plate or cutting board
-- Place it naturally at the side or corner of the scene, like a condiment someone left on the table
+- Place it naturally to the side or corner of the scene, like a condiment left on the table
+- Position the jar so its label faces the camera and is clearly readable
 - Never centered, never dominating the frame
 
-LIGHTING INTEGRATION — MOST CRITICAL:
+LIGHTING INTEGRATION — CRITICAL:
 The jar must be lit by the EXACT same light source as every other element in the scene.
-- If the scene has warm firelight/golden hour: the jar's right side glows amber-orange, left side in cool shadow
-- If the scene has cool window light: the jar has soft cool highlights and warm fill
-- The jar's glass must show reflections of surrounding elements (flames, food, surfaces)
-- The gold lid catches the dominant light just like metal objects in the scene do
-- Cast a realistic shadow from the jar onto the table surface below it
-- This MUST look like one coherent photograph — NOT a product pasted onto a background
+- Match the scene's light direction, color temperature and intensity on the jar
+- The glass must show reflections of surrounding elements
+- Cast a realistic shadow from the jar onto the surface below it
+- This MUST look like ONE coherent photograph — not a product pasted onto a background
 
 SCENE:
 Context: {contexto['nombre']} — {contexto['fondo_prompt']}
-Shoot from a natural food-photography angle (slightly elevated, 30-45 degrees). Realistic depth of field.
+Natural food-photography angle (slightly elevated, 30-45 degrees). Realistic depth of field.
 Square format (1:1), 1080x1080px. No text overlays, no watermarks."""
 
     print(f"Generando imagen MESA con Gemini ({contexto['nombre']})...")
 
+    parts = partes_ref + [{"text": prompt_completo}]
     response = client_gemini.models.generate_content(
         model="gemini-3-pro-image-preview",
-        contents=[{"parts": [{"inline_data": {"mime_type": media_type, "data": img_b64}}, {"text": prompt_completo}]}],
+        contents=[{"parts": parts}],
         config=gtypes.GenerateContentConfig(response_modalities=["IMAGE", "TEXT"]),
     )
 
@@ -328,50 +359,36 @@ def generar_imagen_personas(contexto: dict, indice_botella: int) -> Image.Image:
 
     client_gemini = genai.Client(api_key=os.environ.get("GOOGLE_API_KEY"))
 
-    refs_existentes = [r for r in IMAGENES_REFERENCIA if r.exists()]
-    if not refs_existentes:
-        print("No se encontraron imagenes de referencia.")
-        sys.exit(1)
-    referencia = refs_existentes[(indice_botella + 1) % len(refs_existentes)]
-    print(f"Referencia del dia (personas): {referencia.name}")
+    partes_ref = _partes_referencia(indice_botella)
 
-    ext = referencia.suffix.lower()
-    media_types = {".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".png": "image/png"}
-    media_type = media_types.get(ext, "image/jpeg")
-    with open(referencia, "rb") as f:
-        img_b64 = base64.standard_b64encode(f.read()).decode("utf-8")
-
-    prompt_completo = f"""You are a professional lifestyle and advertising photographer.
-
-I am giving you the REAL product image of "Salsa Bestial" artisanal hot sauce.
-Your task: generate a complete, photorealistic Instagram lifestyle image featuring REAL PEOPLE enjoying food in this context.
+    prompt_completo = f"""You are a professional lifestyle and advertising photographer shooting a real campaign for "Salsa Bestial" hot sauce.
+I am providing {len(partes_ref)} reference photos of the REAL product: views of the jar from the front/side AND a top-down view of the lid.
+Reproduce the jar EXACTLY as it appears in these photos — no changes to shape, label, colors, logo, typography, or lid branding.
 
 PEOPLE — CRITICAL:
 Include 2-3 real people (friends or family, Latin American appearance, ages 25-40) naturally sharing a meal together.
-People are the HERO of this image — their expressions of enjoyment, laughter, or conversation are the focus.
-The scene must feel authentic and candid, not posed like a stock photo. Capture a genuine moment.
+People are the HERO of this image — their expressions, laughter, or conversation are the focus.
+The scene must feel authentic and candid, not posed like a stock photo.
 People should be interacting naturally: passing food, talking, laughing, or adding sauce to their plate.
 
-PRODUCT SIZE — CRITICAL:
-The Salsa Bestial jar (230ml compote-style, ~8cm tall, size of a small jam jar) sits on the table within reach.
-It must appear REALISTICALLY SMALL — much smaller than the plates and dishes around it.
-The jar is a natural part of the table setting, not the main focus.
-Reproduce the jar EXACTLY as shown in the reference: same yellow label, red BESTIAL lettering, gorilla logo, gold lid.
+JAR — COPY FROM REFERENCES EXACTLY:
+- Front/side photos: jar shape, glass, label colors, gorilla logo, BESTIAL lettering
+- Lid photo: branded lid with logo on top — reproduce faithfully when visible
+The jar sits naturally on the table within reach of the people. Small condiment size — much smaller than the plates.
+Do NOT redraw, reinterpret or redesign any part of the product.
 
 SCENE & REALISM:
 Context: {contexto['nombre']} — {contexto['ambiente']}
-Warm, inviting atmosphere. Natural depth of field with people sharp and background softly blurred.
-Consistent, realistic lighting — no flash look. The image must feel like a real candid photo.
-Square format (1:1), 1080x1080px, professional lifestyle photography quality.
-No text overlays, no watermarks.
-
-Generate the complete realistic lifestyle scene."""
+Warm, inviting atmosphere. Natural depth of field — people sharp, background softly blurred.
+Consistent, realistic lighting matching the scene. The image must feel like a real candid photo.
+Square format (1:1), 1080x1080px. No text overlays, no watermarks."""
 
     print(f"Generando imagen PERSONAS con Gemini ({contexto['nombre']})...")
 
+    parts = partes_ref + [{"text": prompt_completo}]
     response = client_gemini.models.generate_content(
         model="gemini-3-pro-image-preview",
-        contents=[{"parts": [{"inline_data": {"mime_type": media_type, "data": img_b64}}, {"text": prompt_completo}]}],
+        contents=[{"parts": parts}],
         config=gtypes.GenerateContentConfig(response_modalities=["IMAGE", "TEXT"]),
     )
 
