@@ -11,6 +11,22 @@
       "archivo": "bestial_20260403_personas.png",
       "tipo": "post",
       "ig_media_id": "18072724835233531"
+    },
+    {
+      "fecha": "05/04/2026 18:02",
+      "archivo": "bestial_20260405_mesa.png",
+      "tipo": "post",
+      "ig_media_id": "17906214393391671",
+      "contexto_id": "terraza_noche",
+      "metricas": {}
+    },
+    {
+      "fecha": "05/04/2026 18:02",
+      "archivo": "bestial_20260405_personas.png",
+      "tipo": "post",
+      "ig_media_id": "17906214393391671",
+      "contexto_id": "terraza_noche",
+      "metricas": {}
     }
   ],
   "stories": [
@@ -26,6 +42,8 @@
   "publicados": [
     "post:bestial_20260402.png",
     "post:bestial_20260403_personas.png",
-    "story:bestial_20260404_personas.png"
+    "story:bestial_20260404_personas.png",
+    "post:bestial_20260405_mesa.png",
+    "post:bestial_20260405_personas.png"
   ]
 }
