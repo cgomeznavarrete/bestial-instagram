@@ -167,6 +167,20 @@
       "tipo": "personas",
       "contexto_id": "picnic_campo",
       "contexto_nombre": "Picnic al aire libre"
+    },
+    {
+      "fecha": "05/04/2026",
+      "archivo": "bestial_20260405_mesa.png",
+      "tipo": "mesa",
+      "contexto_id": "terraza_noche",
+      "contexto_nombre": "Terraza nocturna"
+    },
+    {
+      "fecha": "05/04/2026",
+      "archivo": "bestial_20260405_personas.png",
+      "tipo": "personas",
+      "contexto_id": "terraza_noche",
+      "contexto_nombre": "Terraza nocturna"
     }
   ],
   "contextos_usados": [
@@ -189,6 +203,7 @@
     "mesa_madera_rustica",
     "evento_deportivo",
     "cocina_moderna",
-    "picnic_campo"
+    "picnic_campo",
+    "terraza_noche"
   ]
 }
