@@ -1,23 +1,23 @@
 # Imagen Instagram - 08/04/2026
 
-**Contexto:** Playa y verano
-**Contexto ID:** playa_verano
+**Contexto:** Fiesta y celebración
+**Contexto ID:** cumpleanos_fiesta
 
 ## Caption
 
-El mar, la brisa y una mesa llena de mariscos frescos. Solo falta una cosa para que ese momento sea BESTIAL.
+Ninguna fiesta esta completa sin ese toque que haga a todos repetir bocado.
 
-Nuestra Salsa Tatemada esta hecha artesanalmente con habaneros rostizados al fuego. Ese golpe ahumado y profundo que le da alma a cada ceviche, cada pescado y cada bocado frente al mar.
+Nuestra Salsa Tatemada esta hecha artesanalmente con habaneros rostizados al fuego. Ese sabor ahumado y profundo convierte cualquier botana en la estrella de la celebracion.
 
-Este verano no lleves cualquier salsa a la playa. Lleva la que transforma todo.
+Si vas a armar la fiesta, que se hable de la comida tanto como de la musica 🔥
 
-Haz tu pedido ahora y llevala contigo 🔥
+Haz tu pedido ahora y dale a tu mesa lo que le falta:
 
 ## Caption Story
 
-Playa sin Salsa Tatemada no es playa. Habaneros al fuego que transforman todo 🔥
-Pedila ahora y llevala contigo.
+La fiesta sube de nivel con Salsa Tatemada en la mesa.
+Pedila ahora 🔥
 
 ## Hashtags
 
-#salsasbestial #salsatatemada #picante #bestial #playa #verano #vacaciones #seafood #playacolombia #tropicalfood
+#cumpleanos #fiesta #partyfood #celebracion #appetizers #birthdayparty #salsasbestial #salsatatemada #picante #bestial

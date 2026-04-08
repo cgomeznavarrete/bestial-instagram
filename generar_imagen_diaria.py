@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
 """
 Agente generador de imágenes diarias para Instagram - Salsas Bestial
-Estrategia: genera el FONDO con IA (Gemini) y compone encima el frasco REAL (PIL+rembg).
-El frasco siempre se toma de la foto de referencia — Gemini NUNCA genera el frasco.
+Estrategia: genera el FONDO con IA y compone encima la botella REAL (original).
+Esto garantiza que el frasco siempre sea 100% auténtico.
 
 Uso:
     python generar_imagen_diaria.py              # genera la imagen de hoy
     python generar_imagen_diaria.py --forzar     # regenera aunque ya exista la de hoy
     python generar_imagen_diaria.py --listar     # muestra imágenes generadas
-    python generar_imagen_diaria.py --preparar-frasco  # genera el PNG sin fondo (solo 1 vez)
 
 Requiere:
     ANTHROPIC_API_KEY  - Claude (planificación del prompt)
@@ -44,9 +43,8 @@ IMAGENES_REFERENCIA = [
     CARPETA_INSTAGRAM / "Salsa Bestial.JPEG",
     CARPETA_INSTAGRAM / "Salsa Bestial2.JPEG",
 ]
+# Imagen de referencia de la tapa (siempre se envía junto al frasco)
 IMAGEN_TAPA = CARPETA_INSTAGRAM / "Tapa.jpg"
-# PNG con transparencia del frasco real (generado una vez con rembg, luego commiteado)
-FRASCO_SIN_FONDO = CARPETA_INSTAGRAM / "_frasco_sin_fondo.png"
 HISTORIAL_JSON = CARPETA_INSTAGRAM / "historial_generaciones.json"
 
 BRAND = "Salsas Bestial"
@@ -248,152 +246,98 @@ Devuelve solo este JSON (sin markdown):
     return json.loads(texto)
 
 
-# ─── Composición del frasco real ──────────────────────────────────────────────
+# ─── Utilidad: cargar imagen de referencia en base64 ──────────────────────────
 
-def preparar_frasco_sin_fondo():
+def _cargar_imagen_b64(ruta: Path) -> dict:
+    """Carga una imagen y devuelve el dict inline_data para Gemini."""
+    ext = ruta.suffix.lower()
+    media_types = {".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".png": "image/png"}
+    media_type = media_types.get(ext, "image/jpeg")
+    with open(ruta, "rb") as f:
+        data = base64.standard_b64encode(f.read()).decode("utf-8")
+    return {"inline_data": {"mime_type": media_type, "data": data}}
+
+
+def _partes_referencia(indice_botella: int) -> list:
     """
-    Usa rembg para quitar el fondo de la foto de referencia del frasco
-    y guarda el resultado como PNG con transparencia.
-    Se ejecuta una sola vez localmente; el PNG resultante se commitea al repo
-    para que GitHub Actions lo use sin necesidad de rembg en CI.
+    Devuelve siempre las 3 partes de referencia del producto:
+      1. Salsa Bestial.JPEG o Salsa Bestial2.JPEG (alternando)
+      2. La otra imagen del frasco
+      3. Tapa.jpg — imprescindible para reproducir el logo de la tapa
     """
-    ruta_ref = None
-    for r in IMAGENES_REFERENCIA:
-        if r.exists():
-            ruta_ref = r
-            break
-    if ruta_ref is None:
-        print("ERROR: No se encontraron imágenes de referencia del frasco.")
+    refs_existentes = [r for r in IMAGENES_REFERENCIA if r.exists()]
+    if not refs_existentes:
+        print("ERROR: No se encontraron imagenes de referencia del frasco.")
         sys.exit(1)
 
-    print(f"Quitando fondo de {ruta_ref.name} con rembg (puede tardar ~30s)...")
-    try:
-        from rembg import remove
-        with open(ruta_ref, "rb") as f:
-            resultado = remove(f.read())
-        img = Image.open(io.BytesIO(resultado)).convert("RGBA")
-        img.save(FRASCO_SIN_FONDO, "PNG")
-        print(f"Frasco sin fondo guardado: {FRASCO_SIN_FONDO.name}")
-        print(f"Tamaño: {img.size[0]}×{img.size[1]}px")
-        print("\nAhora commitea este archivo al repo para que funcione en GitHub Actions.")
-    except ImportError:
-        print("ERROR: rembg no instalado. Ejecuta: pip install rembg")
-        sys.exit(1)
+    # Alternar entre las dos fotos del frasco
+    ref_principal = refs_existentes[indice_botella % len(refs_existentes)]
+    ref_secundaria = refs_existentes[(indice_botella + 1) % len(refs_existentes)]
 
+    partes = [_cargar_imagen_b64(ref_principal)]
+    if ref_secundaria != ref_principal:
+        partes.append(_cargar_imagen_b64(ref_secundaria))
 
-def _obtener_frasco_sin_fondo() -> Image.Image:
-    """
-    Devuelve el frasco real sin fondo (RGBA).
-    Prioriza el PNG pre-generado; si no existe, lo genera con rembg.
-    """
-    if FRASCO_SIN_FONDO.exists():
-        return Image.open(FRASCO_SIN_FONDO).convert("RGBA")
+    # Siempre incluir la tapa
+    if IMAGEN_TAPA.exists():
+        partes.append(_cargar_imagen_b64(IMAGEN_TAPA))
+        print(f"Referencias: {ref_principal.name} + {ref_secundaria.name} + {IMAGEN_TAPA.name}")
+    else:
+        print(f"ADVERTENCIA: {IMAGEN_TAPA.name} no encontrada — el logo de la tapa puede fallar")
+        print(f"Referencias: {ref_principal.name} + {ref_secundaria.name}")
 
-    # No hay PNG pre-generado: usar rembg en tiempo real
-    ruta_ref = next((r for r in IMAGENES_REFERENCIA if r.exists()), None)
-    if ruta_ref is None:
-        print("ERROR: No se encontraron imágenes de referencia del frasco.")
-        sys.exit(1)
-
-    print(f"AVISO: {FRASCO_SIN_FONDO.name} no existe. Generando con rembg...")
-    try:
-        from rembg import remove
-        with open(ruta_ref, "rb") as f:
-            resultado = remove(f.read())
-        img = Image.open(io.BytesIO(resultado)).convert("RGBA")
-        img.save(FRASCO_SIN_FONDO, "PNG")
-        print(f"Frasco sin fondo generado y guardado en caché.")
-        return img
-    except ImportError:
-        print("ERROR: rembg no instalado. Ejecuta: pip install rembg")
-        sys.exit(1)
-
-
-def _componer_con_frasco(fondo: Image.Image, posicion: str = "derecha") -> Image.Image:
-    """
-    Compone el frasco REAL sobre el fondo generado con integración natural:
-    - Ajuste de brillo según la luminosidad de la zona del fondo
-    - Bordes del alpha suavizados (sin corte duro)
-    - Sombra elíptica desplazada para simular fuente de luz lateral
-    El frasco ocupa ~20% del alto — siempre menor que un vaso.
-    """
-    from PIL import ImageDraw
-
-    frasco_orig = _obtener_frasco_sin_fondo()
-
-    img_w, img_h = fondo.size  # 1080 × 1080
-    frasco_h = int(img_h * 0.20)  # 230ml tipo compota: pequeño como mermelada
-    ratio = frasco_h / frasco_orig.height
-    frasco_w = int(frasco_orig.width * ratio)
-    frasco = frasco_orig.resize((frasco_w, frasco_h), Image.LANCZOS)
-
-    margin = int(img_w * 0.06)
-    pos_x = (img_w - frasco_w - margin) if posicion == "derecha" else margin
-    pos_y = img_h - frasco_h - margin
-
-    # 1. Analizar luminosidad promedio de la zona donde se colocará el frasco
-    zona = fondo.crop((pos_x, pos_y, pos_x + frasco_w, pos_y + frasco_h))
-    zona_pequeña = zona.resize((10, 10), Image.LANCZOS)  # muestreo rápido
-    zona_data = list(zona_pequeña.getdata())
-    avg_lum = sum(0.299 * p[0] + 0.587 * p[1] + 0.114 * p[2] for p in zona_data) / (len(zona_data) * 255)
-
-    # 2. Suavizar bordes del alpha para eliminar el corte duro
-    r, g, b, alpha = frasco.split()
-    alpha = alpha.filter(ImageFilter.GaussianBlur(radius=1.2))
-
-    # 3. Ajuste de brillo: el frasco se aclara/oscurece según la zona del fondo
-    factor = 0.80 + avg_lum * 0.40  # rango ~0.80 (zona oscura) a ~1.20 (zona clara)
-    factor = max(0.75, min(1.25, factor))
-    frasco_rgb = Image.merge("RGB", (r, g, b))
-    frasco_rgb = ImageEnhance.Brightness(frasco_rgb).enhance(factor)
-    r2, g2, b2 = frasco_rgb.split()
-    frasco = Image.merge("RGBA", (r2, g2, b2, alpha))
-
-    # 4. Sombra elíptica desplazada (simula luz desde la izquierda/arriba)
-    sombra = Image.new("RGBA", fondo.size, (0, 0, 0, 0))
-    draw = ImageDraw.Draw(sombra)
-    offset_x = int(frasco_w * 0.10)
-    cx = pos_x + frasco_w // 2 + offset_x
-    cy = pos_y + frasco_h + 5
-    rx = int(frasco_w * 0.44)
-    ry = int(frasco_w * 0.11)
-    draw.ellipse([cx - rx, cy - ry, cx + rx, cy + ry], fill=(0, 0, 0, 95))
-    sombra = sombra.filter(ImageFilter.GaussianBlur(radius=12))
-
-    # 5. Componer capas
-    resultado = fondo.convert("RGBA")
-    resultado = Image.alpha_composite(resultado, sombra)
-    resultado.paste(frasco, (pos_x, pos_y), frasco)
-    return resultado.convert("RGB")
+    return partes
 
 
 # ─── Paso 2a: Imagen estilo MESA (comida, sin personas) ───────────────────────
 
 def generar_imagen_mesa(contexto: dict, indice_botella: int) -> Image.Image:
-    """
-    Genera el FONDO de la escena con Gemini (sin frasco).
-    Luego compone el frasco REAL encima con PIL.
-    El frasco NUNCA es generado por IA — siempre es la foto de referencia.
-    """
     from google import genai
     from google.genai import types as gtypes
 
     client_gemini = genai.Client(api_key=os.environ.get("GOOGLE_API_KEY"))
 
-    # Gemini genera SOLO el fondo — sin ningún producto ni frasco
-    prompt_fondo = f"""Professional food photography, no people.
-Scene: {contexto['nombre']}
-{contexto['fondo_prompt']}
+    partes_ref = _partes_referencia(indice_botella)
+
+    prompt_completo = f"""You are a professional food photographer shooting a real campaign for "Salsa Bestial" hot sauce.
+I am providing {len(partes_ref)} reference photos of the REAL product: views of the jar from the front/side AND a top-down view of the lid.
+Reproduce the jar EXACTLY as it appears in these photos — no changes to shape, label, colors, logo, typography, or lid branding.
+NO people in this image — food and product only.
+
+JAR — COPY FROM REFERENCES EXACTLY:
+Use every reference photo to faithfully reproduce ALL parts of the jar:
+- Front/side photos: jar shape, glass, label colors, gorilla logo on label, BESTIAL lettering, sauce visible through glass
+- Lid photo: the branded lid with logo printed on top must match exactly — reproduce it faithfully when the lid is visible
+Do NOT redraw, reinterpret or redesign any part of the product.
+
+JAR SIZE & PROPORTIONS — STRICTLY ENFORCED:
+The jar is 230ml compote-style — the size of a small jam jar (roughly 8cm tall × 7cm wide).
+MANDATORY size rules — violating any of these is an error:
+- The jar must be SMALLER than a standard drinking glass or cup
+- The jar must be at least 3× smaller in apparent size than a dinner plate or cutting board
+- Place it naturally to the side or corner of the scene, like a condiment left on the table
+- Position the jar so its label faces the camera and is clearly readable
+- Never centered, never dominating the frame
+- If in doubt, make the jar smaller — it is a small product
+
+LIGHTING INTEGRATION — CRITICAL:
+The jar must be lit by the EXACT same light source as every other element in the scene.
+- Match the scene's light direction, color temperature and intensity on the jar
+- The glass must show reflections of surrounding elements
+- Cast a realistic shadow from the jar onto the surface below it
+- This MUST look like ONE coherent photograph — not a product pasted onto a background
+
+SCENE:
+Context: {contexto['nombre']} — {contexto['fondo_prompt']}
 Natural food-photography angle (slightly elevated, 30-45 degrees). Realistic depth of field.
-Leave a small clear space in the lower-right corner of the frame for a small condiment jar.
-Square format (1:1), 1080x1080px. No text overlays, no watermarks.
-IMPORTANT: Do NOT include any bottles, jars, sauces, or condiment products in the scene."""
+Square format (1:1), 1080x1080px. No text overlays, no watermarks."""
 
-    print(f"Generando fondo MESA con Gemini ({contexto['nombre']})...")
+    print(f"Generando imagen MESA con Gemini ({contexto['nombre']})...")
 
+    parts = partes_ref + [{"text": prompt_completo}]
     response = client_gemini.models.generate_content(
         model="gemini-3-pro-image-preview",
-        contents=[{"parts": [{"text": prompt_fondo}]}],
+        contents=[{"parts": parts}],
         config=gtypes.GenerateContentConfig(response_modalities=["IMAGE", "TEXT"]),
     )
 
@@ -406,45 +350,57 @@ IMPORTANT: Do NOT include any bottles, jars, sauces, or condiment products in th
     if imagen_bytes is None:
         raise ValueError("Gemini no devolvio una imagen (mesa)")
 
-    fondo = Image.open(io.BytesIO(imagen_bytes)).convert("RGB")
-    fondo = fondo.resize((TAMANO_FINAL, TAMANO_FINAL), Image.LANCZOS)
-
-    # Componer el frasco real sobre el fondo — 100% auténtico, nunca generado por IA
-    print("Componiendo frasco real (foto de referencia) sobre el fondo...")
-    posicion = "izquierda" if indice_botella % 2 == 0 else "derecha"
-    return _componer_con_frasco(fondo, posicion=posicion)
+    print("Imagen MESA generada.")
+    img = Image.open(io.BytesIO(imagen_bytes)).convert("RGB")
+    return img.resize((TAMANO_FINAL, TAMANO_FINAL), Image.LANCZOS)
 
 
 # ─── Paso 2b: Imagen estilo PERSONAS (lifestyle con gente) ────────────────────
 
 def generar_imagen_personas(contexto: dict, indice_botella: int) -> Image.Image:
-    """
-    Genera el FONDO con personas con Gemini (sin frasco).
-    Luego compone el frasco REAL encima con PIL.
-    El frasco NUNCA es generado por IA — siempre es la foto de referencia.
-    """
     from google import genai
     from google.genai import types as gtypes
 
     client_gemini = genai.Client(api_key=os.environ.get("GOOGLE_API_KEY"))
 
-    # Gemini genera SOLO la escena con personas — sin ningún producto ni frasco
-    prompt_fondo = f"""Professional lifestyle and advertising photography.
+    partes_ref = _partes_referencia(indice_botella)
+
+    prompt_completo = f"""You are a professional lifestyle and advertising photographer shooting a real campaign for "Salsa Bestial" hot sauce.
+I am providing {len(partes_ref)} reference photos of the REAL product: views of the jar from the front/side AND a top-down view of the lid.
+Reproduce the jar EXACTLY as it appears in these photos — no changes to shape, label, colors, logo, typography, or lid branding.
+
+PEOPLE — CRITICAL:
 Include 2-3 real people (friends or family, Latin American appearance, ages 25-40) naturally sharing a meal together.
-People are the HERO — their expressions, laughter, or conversation are the focus.
+People are the HERO of this image — their expressions, laughter, or conversation are the focus.
 The scene must feel authentic and candid, not posed like a stock photo.
-People should be interacting naturally: passing food, talking, laughing.
-Ensure the lower portion of the frame shows the table surface with a visible clear space in one corner for a small condiment jar.
-Scene: {contexto['nombre']} — {contexto['ambiente']}
+People should be interacting naturally: passing food, talking, laughing, or adding sauce to their plate.
+
+JAR — COPY FROM REFERENCES EXACTLY:
+- Front/side photos: jar shape, glass, label colors, gorilla logo, BESTIAL lettering
+- Lid photo: branded lid with logo on top — reproduce faithfully when visible
+Do NOT redraw, reinterpret or redesign any part of the product.
+
+JAR SIZE & PROPORTIONS — STRICTLY ENFORCED:
+The jar is 230ml compote-style — the size of a small jam jar (roughly 8cm tall × 7cm wide).
+MANDATORY size rules — violating any of these is an error:
+- The jar must be SMALLER than a standard drinking glass or cup
+- The jar must be SMALLER than a dinner plate (at least 3× smaller in apparent size)
+- A person's hand holding the jar must look natural — like holding a jam jar, not a large bottle
+- Place the jar to the side of the scene as a condiment, never dominating the frame
+If in doubt, make the jar smaller — it is a small product.
+
+SCENE & REALISM:
+Context: {contexto['nombre']} — {contexto['ambiente']}
 Warm, inviting atmosphere. Natural depth of field — people sharp, background softly blurred.
-Square format (1:1), 1080x1080px. No text overlays, no watermarks.
-IMPORTANT: Do NOT include any bottles, jars, sauces, or condiment products in the scene."""
+Consistent, realistic lighting matching the scene. The image must feel like a real candid photo.
+Square format (1:1), 1080x1080px. No text overlays, no watermarks."""
 
-    print(f"Generando fondo PERSONAS con Gemini ({contexto['nombre']})...")
+    print(f"Generando imagen PERSONAS con Gemini ({contexto['nombre']})...")
 
+    parts = partes_ref + [{"text": prompt_completo}]
     response = client_gemini.models.generate_content(
         model="gemini-3-pro-image-preview",
-        contents=[{"parts": [{"text": prompt_fondo}]}],
+        contents=[{"parts": parts}],
         config=gtypes.GenerateContentConfig(response_modalities=["IMAGE", "TEXT"]),
     )
 
@@ -457,13 +413,9 @@ IMPORTANT: Do NOT include any bottles, jars, sauces, or condiment products in th
     if imagen_bytes is None:
         raise ValueError("Gemini no devolvio una imagen (personas)")
 
-    fondo = Image.open(io.BytesIO(imagen_bytes)).convert("RGB")
-    fondo = fondo.resize((TAMANO_FINAL, TAMANO_FINAL), Image.LANCZOS)
-
-    # Componer el frasco real sobre el fondo — 100% auténtico, nunca generado por IA
-    print("Componiendo frasco real (foto de referencia) sobre el fondo...")
-    posicion = "derecha" if indice_botella % 2 == 0 else "izquierda"
-    return _componer_con_frasco(fondo, posicion=posicion)
+    print("Imagen PERSONAS generada.")
+    img = Image.open(io.BytesIO(imagen_bytes)).convert("RGB")
+    return img.resize((TAMANO_FINAL, TAMANO_FINAL), Image.LANCZOS)
 
 
 # ─── Guardar resultado y metadata ─────────────────────────────────────────────
@@ -587,8 +539,6 @@ if __name__ == "__main__":
         fecha_arg = args[idx + 1] if idx + 1 < len(args) else None
     if "--listar" in args:
         listar_imagenes()
-    elif "--preparar-frasco" in args:
-        preparar_frasco_sin_fondo()
     elif "--forzar" in args:
         generar_imagen_hoy(forzar=True, fecha_override=fecha_arg)
     else:
