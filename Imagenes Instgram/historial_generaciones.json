@@ -181,6 +181,13 @@
       "tipo": "personas",
       "contexto_id": "terraza_noche",
       "contexto_nombre": "Terraza nocturna"
+    },
+    {
+      "fecha": "08/04/2026",
+      "archivo": "bestial_20260408_personas.png",
+      "tipo": "personas",
+      "contexto_id": "playa_verano",
+      "contexto_nombre": "Playa y verano"
     }
   ],
   "contextos_usados": [
@@ -204,6 +211,7 @@
     "evento_deportivo",
     "cocina_moderna",
     "picnic_campo",
-    "terraza_noche"
+    "terraza_noche",
+    "playa_verano"
   ]
 }

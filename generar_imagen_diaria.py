@@ -311,34 +311,56 @@ def _obtener_frasco_sin_fondo() -> Image.Image:
 
 def _componer_con_frasco(fondo: Image.Image, posicion: str = "derecha") -> Image.Image:
     """
-    Compone el frasco REAL (foto de referencia, sin fondo) sobre el fondo generado.
-    El frasco ocupa ~20% del alto — siempre menor que un vaso (proporciones correctas).
-    posicion: "derecha" o "izquierda" (esquina inferior)
+    Compone el frasco REAL sobre el fondo generado con integración natural:
+    - Ajuste de brillo según la luminosidad de la zona del fondo
+    - Bordes del alpha suavizados (sin corte duro)
+    - Sombra elíptica desplazada para simular fuente de luz lateral
+    El frasco ocupa ~20% del alto — siempre menor que un vaso.
     """
     from PIL import ImageDraw
 
-    frasco = _obtener_frasco_sin_fondo()
+    frasco_orig = _obtener_frasco_sin_fondo()
 
     img_w, img_h = fondo.size  # 1080 × 1080
-    # Frasco: 20% del alto de la imagen (230ml tipo compota, pequeño como mermelada)
-    frasco_h = int(img_h * 0.20)
-    ratio = frasco_h / frasco.height
-    frasco_w = int(frasco.width * ratio)
-    frasco = frasco.resize((frasco_w, frasco_h), Image.LANCZOS)
+    frasco_h = int(img_h * 0.20)  # 230ml tipo compota: pequeño como mermelada
+    ratio = frasco_h / frasco_orig.height
+    frasco_w = int(frasco_orig.width * ratio)
+    frasco = frasco_orig.resize((frasco_w, frasco_h), Image.LANCZOS)
 
     margin = int(img_w * 0.06)
     pos_x = (img_w - frasco_w - margin) if posicion == "derecha" else margin
     pos_y = img_h - frasco_h - margin
 
-    # Sombra elíptica suave debajo del frasco
+    # 1. Analizar luminosidad promedio de la zona donde se colocará el frasco
+    zona = fondo.crop((pos_x, pos_y, pos_x + frasco_w, pos_y + frasco_h))
+    zona_pequeña = zona.resize((10, 10), Image.LANCZOS)  # muestreo rápido
+    zona_data = list(zona_pequeña.getdata())
+    avg_lum = sum(0.299 * p[0] + 0.587 * p[1] + 0.114 * p[2] for p in zona_data) / (len(zona_data) * 255)
+
+    # 2. Suavizar bordes del alpha para eliminar el corte duro
+    r, g, b, alpha = frasco.split()
+    alpha = alpha.filter(ImageFilter.GaussianBlur(radius=1.2))
+
+    # 3. Ajuste de brillo: el frasco se aclara/oscurece según la zona del fondo
+    factor = 0.80 + avg_lum * 0.40  # rango ~0.80 (zona oscura) a ~1.20 (zona clara)
+    factor = max(0.75, min(1.25, factor))
+    frasco_rgb = Image.merge("RGB", (r, g, b))
+    frasco_rgb = ImageEnhance.Brightness(frasco_rgb).enhance(factor)
+    r2, g2, b2 = frasco_rgb.split()
+    frasco = Image.merge("RGBA", (r2, g2, b2, alpha))
+
+    # 4. Sombra elíptica desplazada (simula luz desde la izquierda/arriba)
     sombra = Image.new("RGBA", fondo.size, (0, 0, 0, 0))
     draw = ImageDraw.Draw(sombra)
-    cx = pos_x + frasco_w // 2
-    cy = pos_y + frasco_h + 4
-    rx, ry = frasco_w // 2, int(frasco_w * 0.12)
-    draw.ellipse([cx - rx, cy - ry, cx + rx, cy + ry], fill=(0, 0, 0, 90))
-    sombra = sombra.filter(ImageFilter.GaussianBlur(radius=10))
+    offset_x = int(frasco_w * 0.10)
+    cx = pos_x + frasco_w // 2 + offset_x
+    cy = pos_y + frasco_h + 5
+    rx = int(frasco_w * 0.44)
+    ry = int(frasco_w * 0.11)
+    draw.ellipse([cx - rx, cy - ry, cx + rx, cy + ry], fill=(0, 0, 0, 95))
+    sombra = sombra.filter(ImageFilter.GaussianBlur(radius=12))
 
+    # 5. Componer capas
     resultado = fondo.convert("RGBA")
     resultado = Image.alpha_composite(resultado, sombra)
     resultado.paste(frasco, (pos_x, pos_y), frasco)

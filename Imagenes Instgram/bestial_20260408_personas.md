@@ -1,23 +1,23 @@
 # Imagen Instagram - 08/04/2026
 
-**Contexto:** Desayuno / Brunch
-**Contexto ID:** desayuno_brunch
+**Contexto:** Playa y verano
+**Contexto ID:** playa_verano
 
 ## Caption
 
-Un buen desayuno no necesita mucho... pero si necesita lo correcto.
+El mar, la brisa y una mesa llena de mariscos frescos. Solo falta una cosa para que ese momento sea BESTIAL.
 
-Unos huevos recien hechos, una mañana tranquila y nuestra Salsa Tatemada encima de todo. Hecha artesanalmente con habaneros rostizados al fuego, ese sabor ahumado y profundo convierte cualquier desayuno en algo que no vas a olvidar.
+Nuestra Salsa Tatemada esta hecha artesanalmente con habaneros rostizados al fuego. Ese golpe ahumado y profundo que le da alma a cada ceviche, cada pescado y cada bocado frente al mar.
 
-Una vez que la pruebas en tu brunch, no hay vuelta atras.
+Este verano no lleves cualquier salsa a la playa. Lleva la que transforma todo.
 
-Haz tu pedido ahora y transforma tus mañanas 🔥
+Haz tu pedido ahora y llevala contigo 🔥
 
 ## Caption Story
 
-Tus huevos merecen Salsa Tatemada. Habaneros al fuego, sabor que transforma tu mañana.
-Pedila ahora 🔥
+Playa sin Salsa Tatemada no es playa. Habaneros al fuego que transforman todo 🔥
+Pedila ahora y llevala contigo.
 
 ## Hashtags
 
-#brunch #desayuno #brunchtime #morningvibes #weekendbrunch #huevos #salsasbestial #salsatatemada #picante #bestial
+#salsasbestial #salsatatemada #picante #bestial #playa #verano #vacaciones #seafood #playacolombia #tropicalfood
