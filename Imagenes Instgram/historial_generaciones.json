@@ -209,6 +209,20 @@
       "tipo": "personas",
       "contexto_id": "cumpleanos_fiesta",
       "contexto_nombre": "Fiesta y celebración"
+    },
+    {
+      "fecha": "08/04/2026",
+      "archivo": "bestial_20260408_mesa.png",
+      "tipo": "mesa",
+      "contexto_id": "desayuno_brunch",
+      "contexto_nombre": "Desayuno / Brunch"
+    },
+    {
+      "fecha": "08/04/2026",
+      "archivo": "bestial_20260408_personas.png",
+      "tipo": "personas",
+      "contexto_id": "desayuno_brunch",
+      "contexto_nombre": "Desayuno / Brunch"
     }
   ],
   "contextos_usados": [
@@ -234,6 +248,7 @@
     "picnic_campo",
     "terraza_noche",
     "playa_verano",
-    "cumpleanos_fiesta"
+    "cumpleanos_fiesta",
+    "desayuno_brunch"
   ]
 }
