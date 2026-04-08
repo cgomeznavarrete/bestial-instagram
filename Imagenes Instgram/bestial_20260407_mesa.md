@@ -1,23 +1,21 @@
 # Imagen Instagram - 07/04/2026
 
-**Contexto:** Fiesta y celebración
-**Contexto ID:** cumpleanos_fiesta
+**Contexto:** Terraza nocturna
+**Contexto ID:** terraza_noche
 
 ## Caption
 
-No hay fiesta completa sin ese algo que haga memorable cada bocado.
+Una noche en la terraza con buena vista y buena compañia merece algo mas que comida comun.
 
-Nuestra Salsa Tatemada es hecha artesanalmente con habaneros rostizados al fuego. Ese sabor ahumado y profundo que convierte cualquier botana en la estrella de la celebracion.
+Nuestra Salsa Tatemada esta hecha artesanalmente con habaneros rostizados al fuego. Ese sabor ahumado y profundo que convierte cualquier plato en el verdadero protagonista de la noche.
 
-Si vas a armar la fiesta, arma la mesa como se debe. Una vez que tus invitados la prueben, te la van a pedir siempre.
-
-Haz tu pedido ahora y que no falte en tu proxima celebracion 🔥
+No dejes que a tu mesa le falte lo mejor. Haz tu pedido ahora y lleva cada bocado a otro nivel 🔥
 
 ## Caption Story
 
-Tu fiesta merece sabor BESTIAL. Salsa Tatemada con habaneros al fuego para que cada bocado sea inolvidable.
+La noche pide terraza, buena compañia y Salsa Tatemada en la mesa.
 Pedila ahora 🔥
 
 ## Hashtags
 
-#cumpleanos #fiesta #partyfood #celebracion #appetizers #birthdayparty #salsasbestial #salsatatemada #picante #bestial
+#terrazanocturna #viernes #nightout #sobremesa #tapas #ciudadnocturna #salsasbestial #salsatatemada #picante #bestial
