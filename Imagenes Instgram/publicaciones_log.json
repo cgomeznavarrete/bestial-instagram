@@ -53,6 +53,14 @@
       "ig_media_id": "18095717855026302",
       "contexto_id": "playa_verano",
       "metricas": {}
+    },
+    {
+      "fecha": "08/04/2026 18:55",
+      "archivo": "bestial_20260408_personas.png",
+      "tipo": "story",
+      "ig_media_id": "17995784492762252",
+      "contexto_id": "desayuno_brunch",
+      "metricas": {}
     }
   ],
   "publicados": [
@@ -62,6 +70,7 @@
     "post:bestial_20260405_mesa.png",
     "post:bestial_20260405_personas.png",
     "story:bestial_20260406_personas.png",
-    "post:bestial_20260407_personas.png"
+    "post:bestial_20260407_personas.png",
+    "story:bestial_20260408_personas.png"
   ]
 }
