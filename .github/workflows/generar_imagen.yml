@@ -1,9 +1,8 @@
 name: Generar Imagen Diaria Bestial
 
 on:
-  # GENERACIÓN PAUSADA — reactivar cuando el proceso esté validado
-  # schedule:
-  #   - cron: '0 14 * * *'   # 9:00 AM Colombia (UTC-5)
+  schedule:
+    - cron: '0 14 * * *'   # 9:00 AM Colombia (UTC-5)
   workflow_dispatch:        # Permite ejecutar manualmente desde GitHub
 
 jobs:
