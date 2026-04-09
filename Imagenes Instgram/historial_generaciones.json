@@ -237,6 +237,20 @@
       "tipo": "personas",
       "contexto_id": "cocina_campo",
       "contexto_nombre": "Cocina de campo / Rancho"
+    },
+    {
+      "fecha": "09/04/2026",
+      "archivo": "bestial_20260409_mesa.png",
+      "tipo": "mesa",
+      "contexto_id": "post_entrenamiento",
+      "contexto_nombre": "Post entrenamiento / Healthy"
+    },
+    {
+      "fecha": "09/04/2026",
+      "archivo": "bestial_20260409_personas.png",
+      "tipo": "personas",
+      "contexto_id": "post_entrenamiento",
+      "contexto_nombre": "Post entrenamiento / Healthy"
     }
   ],
   "contextos_usados": [
@@ -265,6 +279,7 @@
     "cumpleanos_fiesta",
     "desayuno_brunch",
     "street_food",
-    "cocina_campo"
+    "cocina_campo",
+    "post_entrenamiento"
   ]
 }
