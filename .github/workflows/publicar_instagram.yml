@@ -1,15 +1,16 @@
 name: Publicar en Instagram - Salsas Bestial
 
 on:
-  # PUBLICACIONES PAUSADAS — reactivar cuando el proceso de generación esté validado
-  # schedule:
-  #   - cron: '0 17 * * 2'   # Martes POST
-  #   - cron: '0 17 * * 5'   # Viernes POST
-  #   - cron: '0 17 * * 0'   # Domingo POST
-  #   - cron: '0 15 * * 1'   # Lunes STORY
-  #   - cron: '0 15 * * 3'   # Miércoles STORY
-  #   - cron: '0 15 * * 4'   # Jueves STORY
-  #   - cron: '0 15 * * 6'   # Sábado STORY
+  schedule:
+    # POSTS en el feed — Martes, Viernes y Domingo 12:00 PM Colombia (17:00 UTC)
+    - cron: '0 17 * * 2'   # Martes
+    - cron: '0 17 * * 5'   # Viernes
+    - cron: '0 17 * * 0'   # Domingo
+    # STORIES — Lunes, Miércoles, Jueves, Sábado 10:00 AM Colombia (15:00 UTC)
+    - cron: '0 15 * * 1'   # Lunes
+    - cron: '0 15 * * 3'   # Miércoles
+    - cron: '0 15 * * 4'   # Jueves
+    - cron: '0 15 * * 6'   # Sábado
   workflow_dispatch:
     inputs:
       tipo:
