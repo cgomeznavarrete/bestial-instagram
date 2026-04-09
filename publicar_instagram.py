@@ -187,6 +187,43 @@ def seleccionar_imagen(tipo: str) -> dict | None:
     return imagenes[-1] if imagenes else None
 
 
+def seleccionar_imagen_alternando(tipo_pub: str) -> dict | None:
+    """
+    Selecciona imagen alternando entre _mesa y _personas.
+    Revisa el último publicado del tipo para elegir el opuesto.
+    """
+    log = cargar_log()
+    publicados = set(log.get("publicados", []))
+    historial  = log.get("posts" if tipo_pub == "post" else "stories", [])
+
+    # Determinar cuál fue el último tipo de imagen publicado
+    ultimo_tipo = None
+    if historial:
+        ultimo_archivo = historial[-1].get("archivo", "")
+        if "_mesa" in ultimo_archivo:
+            ultimo_tipo = "mesa"
+        elif "_personas" in ultimo_archivo:
+            ultimo_tipo = "personas"
+
+    # Buscar el tipo opuesto
+    tipo_buscar = "personas" if ultimo_tipo == "mesa" else "mesa"
+    imagenes = obtener_imagenes_disponibles()
+
+    # 1. Buscar imagen del tipo opuesto no publicada
+    for img in imagenes:
+        if tipo_buscar not in img["archivo"]:
+            continue
+        if f"{tipo_pub}:{img['archivo']}" not in publicados:
+            return img
+
+    # 2. Fallback: cualquier imagen no publicada
+    for img in imagenes:
+        if f"{tipo_pub}:{img['archivo']}" not in publicados:
+            return img
+
+    return imagenes[0] if imagenes else None
+
+
 # ─── URL pública vía GitHub (sin costo) ──────────────────────────────────────
 
 def url_github(nombre_archivo: str) -> str:
@@ -471,79 +508,86 @@ def _buscar_par_del_dia(imagenes: list[dict]) -> tuple[dict | None, dict | None]
 
 # ─── Tareas programadas ──────────────────────────────────────────────────────
 
+# Música sugerida para stories — alegre y emotiva (agregar manualmente en Instagram)
+MUSICA_STORIES = [
+    "La Bicicleta — Carlos Vives & Shakira",
+    "Vivir Mi Vida — Marc Anthony",
+    "La Gozadera — Gente de Zona",
+    "Bailando — Enrique Iglesias",
+    "Colombia Tierra Querida — Carlos Vives",
+    "Cumbia Buena — Los Ángeles Azules",
+    "La Negra Tiene Tumbao — Celia Cruz",
+    "Esto Es Lo Que Soy — ChocQuibTown",
+    "Tumbum — Maluma",
+    "La Mordidita — Ricky Martin",
+]
+
+
 def tarea_post():
-    semana = datetime.now().isocalendar()[1]
-    carousel = es_semana_carousel()
-    modo = "CAROUSEL" if carousel else "INDIVIDUAL"
     print(f"\n{'═'*60}")
     print(f"  📸 POST AUTOMÁTICO — {datetime.now().strftime('%d/%m/%Y %H:%M')}")
-    print(f"  Semana {semana} → modo {modo}")
     print(f"{'═'*60}")
 
-    imagenes = obtener_imagenes_disponibles()
-
-    if carousel:
-        mesa, personas = _buscar_par_del_dia(imagenes)
-        if not mesa or not personas:
-            print("  ⚠️  No hay par MESA+PERSONAS disponible para carousel. Publicando individual.")
-            carousel = False
-        else:
-            try:
-                publicar_carousel(mesa, personas)
-                return
-            except Exception as e:
-                print(f"  ❌ Error en carousel: {e}")
-                return
-
-    if not carousel:
-        imagen = seleccionar_imagen("post")
-        if not imagen:
-            print("  ⚠️  No hay imágenes disponibles para publicar.")
-            return
-        try:
-            publicar_post(imagen)
-        except Exception as e:
-            print(f"  ❌ Error: {e}")
+    imagen = seleccionar_imagen_alternando("post")
+    if not imagen:
+        print("  ⚠️  No hay imágenes disponibles para publicar.")
+        return
+    tipo_img = "MESA" if "_mesa" in imagen["archivo"] else "PERSONAS"
+    print(f"  Tipo imagen: {tipo_img}")
+    try:
+        publicar_post(imagen)
+    except Exception as e:
+        print(f"  ❌ Error: {e}")
 
 
 def tarea_story():
+    import random
     print(f"\n{'═'*60}")
     print(f"  📱 STORY AUTOMÁTICA — {datetime.now().strftime('%d/%m/%Y %H:%M')}")
     print(f"{'═'*60}")
-    imagen = seleccionar_imagen("story")
+
+    imagen = seleccionar_imagen_alternando("story")
     if not imagen:
         print("  ⚠️  No hay imágenes disponibles para story.")
         return
+    tipo_img = "MESA" if "_mesa" in imagen["archivo"] else "PERSONAS"
+    print(f"  Tipo imagen: {tipo_img}")
     try:
         publicar_story(imagen)
+        musica = random.choice(MUSICA_STORIES)
+        print(f"\n  🎵 MÚSICA SUGERIDA para esta story:")
+        print(f"  ┌{'─'*50}")
+        print(f"  │ {musica}")
+        print(f"  │ → Agregar manualmente en Instagram como sticker de música")
+        print(f"  └{'─'*50}")
     except Exception as e:
         print(f"  ❌ Error: {e}")
 
 
 def activar_modo_automatico():
     """
-    Programa el calendario semanal de publicaciones:
-      Posts:   Martes 12:00 PM | Viernes 12:00 PM
-      Stories: Lunes 10:00 AM | Miércoles 10:00 AM | Jueves 10:00 AM | Sábado 10:00 AM
+    Calendario semanal de publicaciones:
+      Lunes     10:00 AM → story 1 (mesa o personas, alternando)
+      Lunes     10:30 AM → story 2 (tipo opuesto)
+      Miércoles 12:00 PM → post (alternando mesa/personas)
+      Viernes   10:00 AM → story (alternando)
+      Viernes   12:00 PM → post (alternando)
     """
     print("\n  ⏰ Modo automático activado:")
-    print("  ┌─ POSTS (feed)")
-    print("  │    Martes  12:00 PM")
-    print("  │    Viernes 12:00 PM")
-    print("  └─ STORIES")
-    print("       Lunes     10:00 AM")
-    print("       Miércoles 10:00 AM")
-    print("       Jueves    10:00 AM")
-    print("       Sábado    10:00 AM")
+    print("  ┌─ STORIES")
+    print("  │    Lunes     10:00 AM (story 1 — alternando mesa/personas)")
+    print("  │    Lunes     10:30 AM (story 2 — tipo opuesto)")
+    print("  │    Viernes   10:00 AM (story — alternando)")
+    print("  └─ POSTS (feed)")
+    print("       Miércoles 12:00 PM (alternando mesa/personas)")
+    print("       Viernes   12:00 PM (alternando)")
     print("\n  Presiona Ctrl+C para detener.\n")
 
-    schedule.every().tuesday.at("12:00").do(tarea_post)
-    schedule.every().friday.at("12:00").do(tarea_post)
-
     schedule.every().monday.at("10:00").do(tarea_story)
-    schedule.every().wednesday.at("10:00").do(tarea_story)
-    schedule.every().thursday.at("10:00").do(tarea_story)
-    schedule.every().saturday.at("10:00").do(tarea_story)
+    schedule.every().monday.at("10:30").do(tarea_story)
+    schedule.every().wednesday.at("12:00").do(tarea_post)
+    schedule.every().friday.at("10:00").do(tarea_story)
+    schedule.every().friday.at("12:00").do(tarea_post)
 
     try:
         while True:
@@ -821,7 +865,7 @@ if __name__ == "__main__":
         elif sys.argv[1] == "--preparar-story":
             # Solo prepara la imagen story (9:16) y la guarda en disco.
             # Usado por GitHub Actions para subirla al repo ANTES de publicar.
-            imagen = seleccionar_imagen("story")
+            imagen = seleccionar_imagen_alternando("story")
             if imagen:
                 _adaptar_story(imagen["ruta"])
                 print(f"  Story preparada: {imagen['archivo']}")

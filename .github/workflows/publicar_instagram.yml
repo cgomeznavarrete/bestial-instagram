@@ -2,15 +2,14 @@ name: Publicar en Instagram - Salsas Bestial
 
 on:
   schedule:
-    # POSTS en el feed — Martes, Viernes y Domingo 12:00 PM Colombia (17:00 UTC)
-    - cron: '0 17 * * 2'   # Martes
-    - cron: '0 17 * * 5'   # Viernes
-    - cron: '0 17 * * 0'   # Domingo
-    # STORIES — Lunes, Miércoles, Jueves, Sábado 10:00 AM Colombia (15:00 UTC)
-    - cron: '0 15 * * 1'   # Lunes
-    - cron: '0 15 * * 3'   # Miércoles
-    - cron: '0 15 * * 4'   # Jueves
-    - cron: '0 15 * * 6'   # Sábado
+    # Lunes: 2 stories (10:00 AM y 10:30 AM Colombia)
+    - cron: '0 15 * * 1'    # Lunes 10:00 AM — story 1
+    - cron: '30 15 * * 1'   # Lunes 10:30 AM — story 2
+    # Miércoles: post (12:00 PM Colombia)
+    - cron: '0 17 * * 3'    # Miércoles 12:00 PM — post
+    # Viernes: story 10:00 AM + post 12:00 PM Colombia
+    - cron: '0 15 * * 5'    # Viernes 10:00 AM — story
+    - cron: '0 17 * * 5'    # Viernes 12:00 PM — post
   workflow_dispatch:
     inputs:
       tipo:
@@ -48,11 +47,15 @@ jobs:
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             echo "tipo=${{ inputs.tipo }}" >> $GITHUB_OUTPUT
           else
-            DIA=$(date +%u)   # 1=Lunes ... 7=Domingo
-            if [ "$DIA" = "2" ] || [ "$DIA" = "5" ] || [ "$DIA" = "7" ]; then
-              echo "tipo=post" >> $GITHUB_OUTPUT
+            DIA=$(date +%u)    # 1=Lunes ... 7=Domingo
+            MINUTO=$(date +%M) # minuto UTC
+            HORA=$(date +%H)   # hora UTC
+            if [ "$DIA" = "3" ]; then
+              echo "tipo=post" >> $GITHUB_OUTPUT   # Miércoles siempre post
+            elif [ "$DIA" = "5" ] && [ "$HORA" = "17" ]; then
+              echo "tipo=post" >> $GITHUB_OUTPUT   # Viernes 12PM post
             else
-              echo "tipo=story" >> $GITHUB_OUTPUT
+              echo "tipo=story" >> $GITHUB_OUTPUT  # resto (Lunes x2, Viernes 10AM)
             fi
           fi
 

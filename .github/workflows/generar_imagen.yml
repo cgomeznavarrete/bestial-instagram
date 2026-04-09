@@ -2,7 +2,10 @@ name: Generar Imagen Diaria Bestial
 
 on:
   schedule:
-    - cron: '0 14 * * *'   # 9:00 AM Colombia (UTC-5)
+    - cron: '0 14 * * 1'   # Lunes    9:00 AM Colombia (UTC-5)
+    - cron: '0 14 * * 3'   # Miércoles 9:00 AM Colombia
+    - cron: '0 14 * * 5'   # Viernes  9:00 AM Colombia
+    - cron: '0 14 * * 0'   # Domingo  9:00 AM Colombia
   workflow_dispatch:        # Permite ejecutar manualmente desde GitHub
 
 jobs:
