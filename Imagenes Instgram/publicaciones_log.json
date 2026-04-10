@@ -85,6 +85,14 @@
       "ig_media_id": "17995526816927885",
       "contexto_id": "desayuno_brunch",
       "metricas": {}
+    },
+    {
+      "fecha": "10/04/2026 19:34",
+      "archivo": "bestial_20260410_mesa.png",
+      "tipo": "story",
+      "ig_media_id": "18138168061459213",
+      "contexto_id": "mesa_restaurante",
+      "metricas": {}
     }
   ],
   "publicados": [
@@ -98,6 +106,7 @@
     "story:bestial_20260408_personas.png",
     "story:bestial_20260409_personas.png",
     "post:bestial_20260409_mesa.png",
-    "post:bestial_20260410_personas.png"
+    "post:bestial_20260410_personas.png",
+    "story:bestial_20260410_mesa.png"
   ]
 }
