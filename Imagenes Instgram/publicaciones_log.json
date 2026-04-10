@@ -43,6 +43,14 @@
       "ig_media_id": "17978829761838401",
       "contexto_id": "post_entrenamiento",
       "metricas": {}
+    },
+    {
+      "fecha": "10/04/2026 17:38",
+      "archivo": "bestial_20260410_personas.png",
+      "tipo": "post",
+      "ig_media_id": "18098941961053937",
+      "contexto_id": "mesa_restaurante",
+      "metricas": {}
     }
   ],
   "stories": [
@@ -89,6 +97,7 @@
     "post:bestial_20260407_personas.png",
     "story:bestial_20260408_personas.png",
     "story:bestial_20260409_personas.png",
-    "post:bestial_20260409_mesa.png"
+    "post:bestial_20260409_mesa.png",
+    "post:bestial_20260410_personas.png"
   ]
 }
