@@ -251,6 +251,20 @@
       "tipo": "personas",
       "contexto_id": "post_entrenamiento",
       "contexto_nombre": "Post entrenamiento / Healthy"
+    },
+    {
+      "fecha": "10/04/2026",
+      "archivo": "bestial_20260410_mesa.png",
+      "tipo": "mesa",
+      "contexto_id": "mesa_restaurante",
+      "contexto_nombre": "Mesa de restaurante"
+    },
+    {
+      "fecha": "10/04/2026",
+      "archivo": "bestial_20260410_personas.png",
+      "tipo": "personas",
+      "contexto_id": "mesa_restaurante",
+      "contexto_nombre": "Mesa de restaurante"
     }
   ],
   "contextos_usados": [
@@ -280,6 +294,7 @@
     "desayuno_brunch",
     "street_food",
     "cocina_campo",
-    "post_entrenamiento"
+    "post_entrenamiento",
+    "mesa_restaurante"
   ]
 }
