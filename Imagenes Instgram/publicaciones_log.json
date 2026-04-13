@@ -101,6 +101,14 @@
       "ig_media_id": "17958024951110293",
       "contexto_id": "parrilla_premium",
       "metricas": {}
+    },
+    {
+      "fecha": "13/04/2026 19:52",
+      "archivo": "bestial_20260413_mesa.png",
+      "tipo": "story",
+      "ig_media_id": "18455839243129524",
+      "contexto_id": "parrilla_premium",
+      "metricas": {}
     }
   ],
   "publicados": [
@@ -116,6 +124,7 @@
     "post:bestial_20260409_mesa.png",
     "post:bestial_20260410_personas.png",
     "story:bestial_20260410_mesa.png",
-    "story:bestial_20260413_personas.png"
+    "story:bestial_20260413_personas.png",
+    "story:bestial_20260413_mesa.png"
   ]
 }
