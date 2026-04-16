@@ -307,6 +307,20 @@
       "tipo": "personas",
       "contexto_id": "mesa_madera_rustica",
       "contexto_nombre": "Mesa de madera rústica"
+    },
+    {
+      "fecha": "16/04/2026",
+      "archivo": "bestial_20260416_mesa.png",
+      "tipo": "mesa",
+      "contexto_id": "evento_deportivo",
+      "contexto_nombre": "Evento deportivo"
+    },
+    {
+      "fecha": "16/04/2026",
+      "archivo": "bestial_20260416_personas.png",
+      "tipo": "personas",
+      "contexto_id": "evento_deportivo",
+      "contexto_nombre": "Evento deportivo"
     }
   ],
   "contextos_usados": [
@@ -340,6 +354,7 @@
     "mesa_restaurante",
     "asado_familiar",
     "parrilla_premium",
-    "mesa_madera_rustica"
+    "mesa_madera_rustica",
+    "evento_deportivo"
   ]
 }
