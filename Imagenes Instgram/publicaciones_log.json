@@ -157,6 +157,14 @@
       "ig_media_id": "18082743629105097",
       "contexto_id": "evento_deportivo",
       "metricas": {}
+    },
+    {
+      "fecha": "27/04/2026 19:56",
+      "archivo": "bestial_20260415_personas.png",
+      "tipo": "story",
+      "ig_media_id": "17950085733135417",
+      "contexto_id": "mesa_madera_rustica",
+      "metricas": {}
     }
   ],
   "publicados": [
@@ -179,6 +187,7 @@
     "story:bestial_20260416_personas.png",
     "post:bestial_20260416_mesa.png",
     "post:bestial_20260415_personas.png",
-    "story:bestial_20260416_mesa.png"
+    "story:bestial_20260416_mesa.png",
+    "story:bestial_20260415_personas.png"
   ]
 }
